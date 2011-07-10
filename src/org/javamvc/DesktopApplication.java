@@ -17,10 +17,10 @@ import javax.swing.Icon;
  * @author Erich Schroeter
  */
 public abstract class DesktopApplication implements IDesktopApplication,
-		IPropertyChangeNotifier {
+		IPropertyChangeNotifier, ILifecycleNotifier {
 
 	/** The property identifier for the application icon */
-	public static final String PROPERTY_APPLICATION_ICON = "application_icon";
+	public static final String PROPERTY_APPLICATION_ICON = "application.icon";
 
 	/**
 	 * The container keeping track of objects listening for any/all property
@@ -32,16 +32,47 @@ public abstract class DesktopApplication implements IDesktopApplication,
 	 * changes.
 	 */
 	protected Map<String, List<PropertyChangeListener>> specificPropertyListeners;
+	/**
+	 * The container keeping track of objects listening for any/all
+	 * <code>Lifecycle</code> types.
+	 */
+	protected List<ILifecycleListener> lifecycleListeners;
+	/**
+	 * The container keeping track of objects listening for specific
+	 * <code>Lifecycle</code> type.
+	 */
+	protected Map<Lifecycle, List<ILifecycleListener>> specificLifecycleListeners;
 	/** The reference to the application icon. */
 	protected Icon applicationIcon;
+	/** The state of the application in its life cycle. */
+	protected Lifecycle applicationLifecycleState;
 
 	@Override
 	public void exit() {
 		exit(0);
 	}
 
+	/**
+	 * Exits the application specifying the error code to print to the console.
+	 * The typical value of <code>code</code> is 0 if everything is ok.
+	 * <p>
+	 * This is equivalent to
+	 * 
+	 * <pre>
+	 * {@code
+	 *  fireLifecycleChange(Lifecycle.STOPPING);
+	 *  fireLifecycleChange(Lifecycle.STOPPED);
+	 *  System.exit(code);
+	 * }
+	 * </pre>
+	 * 
+	 * @param code
+	 *            the error code
+	 */
 	@Override
 	public void exit(int code) {
+		fireLifecycleChange(Lifecycle.STOPPING);
+		fireLifecycleChange(Lifecycle.STOPPED);
 		System.exit(code);
 	}
 
@@ -74,7 +105,7 @@ public abstract class DesktopApplication implements IDesktopApplication,
 	}
 
 	//
-	// PropertyChangeNotifier members
+	// IPropertyChangeNotifier members
 	//
 
 	/**
@@ -242,4 +273,85 @@ public abstract class DesktopApplication implements IDesktopApplication,
 			}
 		}
 	}
+
+	//
+	// ILifecycleNotifier members
+	//
+
+	@Override
+	public void addLifecycleListener(ILifecycleListener listener) {
+		// don't instantiate until it's needed
+		lifecycleListeners = lifecycleListeners != null ? lifecycleListeners
+				: new Vector<ILifecycleListener>();
+		lifecycleListeners.add(listener);
+	}
+
+	@Override
+	public void addLifecycleListener(Lifecycle lifecycle,
+			ILifecycleListener listener) {
+		// don't instantiate anything until it's needed
+		specificLifecycleListeners = specificLifecycleListeners != null ? specificLifecycleListeners
+				: new HashMap<Lifecycle, List<ILifecycleListener>>();
+		// if a list doesn't exist, create it
+		if (!specificLifecycleListeners.containsKey(lifecycle)) {
+			specificLifecycleListeners.put(lifecycle,
+					new Vector<ILifecycleListener>());
+		}
+		specificLifecycleListeners.get(lifecycle).add(listener);
+	}
+
+	@Override
+	public void removeLifecycleListener(ILifecycleListener listener) {
+		if (lifecycleListeners != null && listener != null) {
+			lifecycleListeners.remove(listener);
+		}
+	}
+
+	@Override
+	public void removeLifecycleListener(Lifecycle lifecycle,
+			ILifecycleListener listener) {
+		if (specificLifecycleListeners != null && listener != null
+				&& specificLifecycleListeners.containsKey(lifecycle)) {
+			specificLifecycleListeners.get(lifecycle).remove(listener);
+		}
+	}
+
+	@Override
+	public List<ILifecycleListener> getLifecycleListeners() {
+		return lifecycleListeners;
+	}
+
+	@Override
+	public List<ILifecycleListener> getLifecycleListeners(Lifecycle lifecycle) {
+		return specificLifecycleListeners.get(lifecycle);
+	}
+
+	/**
+	 * Handles notifying the <code>LifecycleListener</code>s for the specific
+	 * <code>lifecycle</code>.
+	 * <p>
+	 * This notifies both listeners for all lifecycle types as well as listeners
+	 * for a specific lifecycle types. Specific lifecycle listeners are notified
+	 * before listeners for all lifecycle types.
+	 * 
+	 * @param lifecycle
+	 *            the lifecycle type representing the state of the application
+	 */
+	protected void fireLifecycleChange(Lifecycle lifecycle) {
+		// notify listeners for specific properties
+		if (specificLifecycleListeners != null
+				&& specificLifecycleListeners.containsKey(lifecycle)) {
+			for (ILifecycleListener l : specificLifecycleListeners
+					.get(lifecycle)) {
+				l.lifecycleChanged(new LifecycleChangeEvent(this, lifecycle));
+			}
+		}
+		if (lifecycleListeners != null) {
+			// notify listeners for all properties
+			for (ILifecycleListener l : lifecycleListeners) {
+				l.lifecycleChanged(new LifecycleChangeEvent(this, lifecycle));
+			}
+		}
+	}
+
 }

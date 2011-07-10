@@ -98,9 +98,11 @@ public abstract class GUIApplication extends DesktopApplication {
 	 */
 	@Override
 	public void run(String[] args) {
+		fireLifecycleChange(Lifecycle.STARTING);
 		if (getApplicationWindow() != null) {
 			getApplicationWindow().setVisible(true);
 		}
+		fireLifecycleChange(Lifecycle.STARTED);
 	}
 
 }
