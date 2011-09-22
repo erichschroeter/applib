@@ -13,7 +13,7 @@ import java.util.EventObject;
 public class ViewEvent extends EventObject {
 
 	/** The view for which the event is for. */
-	private View view;
+	private View<?> view;
 
 	/**
 	 * Constructs a <code>ViewEvent</code> specifying the view for which the
@@ -24,7 +24,7 @@ public class ViewEvent extends EventObject {
 	 * @param view
 	 *            the view for which the event is for
 	 */
-	public ViewEvent(Object source, View view) {
+	public ViewEvent(Object source, View<?> view) {
 		super(source);
 		this.view = view;
 	}
@@ -34,7 +34,7 @@ public class ViewEvent extends EventObject {
 	 * 
 	 * @return the view
 	 */
-	public View getView() {
+	public View<?> getView() {
 		return view;
 	}
 

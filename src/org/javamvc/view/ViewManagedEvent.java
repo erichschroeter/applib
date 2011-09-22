@@ -26,7 +26,7 @@ public class ViewManagedEvent extends ViewEvent {
 	 * @param action
 	 *            the action for which this event was initiated on
 	 */
-	public ViewManagedEvent(Object source, View view, int action) {
+	public ViewManagedEvent(Object source, View<?> view, int action) {
 		super(source, view);
 		this.action = action;
 	}

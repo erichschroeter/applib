@@ -12,14 +12,17 @@ import javax.swing.UIManager;
 
 import org.javamvc.GUIApplication;
 import org.javamvc.Lifecycle;
+import org.javamvc.MVCDesktopApplication;
 
 /**
  * This is an example of how an end user would use the <b>javamvc</b> library in
- * their own projects.
+ * their own GUI application. This example is intended to be extremely simple
+ * showing how to quickly get a {@link GUIApplication} implemented. This does
+ * not include any views.
  * 
  * @author Erich Schroeter
  */
-public class SimpleGUIApplication extends GUIApplication {
+public class SimpleGUIApplication extends MVCDesktopApplication {
 
 	/**
 	 * The application version. This should be incremented prior to each
@@ -28,8 +31,8 @@ public class SimpleGUIApplication extends GUIApplication {
 	public static final String VERSION = "0.1";
 
 	/**
-	 * Constructs a default <code>TestGUIApplication</code> which sets the main
-	 * application window to a <code>JFrame</code>.
+	 * Constructs a default <code>SimpleGUIApplication</code> which sets the
+	 * main application window to a <code>JFrame</code>.
 	 */
 	public SimpleGUIApplication() {
 		super(new JFrame());
@@ -53,7 +56,7 @@ public class SimpleGUIApplication extends GUIApplication {
 				exit(0);
 			}
 		});
-		frame.setTitle("Test Application");
+		frame.setTitle("Simple Application");
 		setApplicationIcon(new ImageIcon(SimpleGUIApplication.class
 				.getClassLoader().getResource(
 						"example/resources/application-icon.png")));
@@ -61,8 +64,13 @@ public class SimpleGUIApplication extends GUIApplication {
 	}
 
 	@Override
+	protected void installViews() {
+		// do nothing since we're not using views for this simple example
+	}
+
+	@Override
 	public Preferences getApplicationPreferences() {
-		return getApplicationPreferences("test-gui-application");
+		return getApplicationPreferences("simple-gui-application");
 	}
 
 	@Override

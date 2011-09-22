@@ -78,11 +78,13 @@ public abstract class GUIApplication extends DesktopApplication {
 	 * Constructs a <code>GUIApplication</code> specifying the type of
 	 * <code>Container</code> to use for the main application window. This
 	 * initializes the application window by calling
-	 * {@link #installApplicationPreferences()}.
+	 * {@link #initializeWindow(Container)} and initializes the application
+	 * preferences by calling {@link #installApplicationPreferences()}.
 	 * <p>
 	 * The <code>applicationWindow</code> is what will be returned by the
 	 * {@link #getApplicationWindow()}.
 	 * 
+	 * @see #getApplicationWindow()
 	 * @param applicationWindow
 	 *            the object to use as the main application window
 	 */

@@ -15,7 +15,7 @@ import java.util.Vector;
 public class ViewManager {
 
 	/** The map of view keys to the View instance. */
-	private Map<String, View> views;
+	private Map<String, View<?>> views;
 	/**
 	 * Whether to auto unregister a view when trying to register a key already
 	 * being used.
@@ -25,7 +25,7 @@ public class ViewManager {
 	private List<ViewManagerListener> listeners;
 
 	public ViewManager() {
-		views = new HashMap<String, View>();
+		views = new HashMap<String, View<?>>();
 		listeners = new Vector<ViewManagerListener>();
 	}
 
@@ -60,7 +60,7 @@ public class ViewManager {
 	 * @return the mapped view, or <code>null</code> if <code>key</code> doesn't
 	 *         exist
 	 */
-	public View getView(String key) {
+	public View<?> getView(String key) {
 		return views.get(key);
 	}
 
@@ -92,7 +92,7 @@ public class ViewManager {
 	 * @param view
 	 *            the view being mapped to <code>key</code>
 	 */
-	public void registerView(String key, View view) {
+	public void registerView(String key, View<?> view) {
 		if (!views.containsKey(key)) {
 			// key not being used, so simply add to the map
 			views.put(key, view);
@@ -121,7 +121,7 @@ public class ViewManager {
 	 */
 	public void unregisterView(String key) {
 		if (views.containsKey(key)) {
-			View view = views.remove(key);
+			View<?> view = views.remove(key);
 			fireViewManagedEvent(new ViewManagedEvent(this, view,
 					ViewManagedEvent.UNREGISTERED));
 		}
