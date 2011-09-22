@@ -1,7 +1,7 @@
 package org.javamvc;
 
-import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeSupport;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -34,16 +34,8 @@ import javax.swing.Icon;
 public abstract class DesktopApplication implements IDesktopApplication,
 		IPropertyChangeNotifier, ILifecycleNotifier {
 
-	/**
-	 * The container keeping track of objects listening for any/all property
-	 * changes.
-	 */
-	protected List<PropertyChangeListener> propertyListeners;
-	/**
-	 * The container keeping track of objects listening for specific property
-	 * changes.
-	 */
-	protected Map<String, List<PropertyChangeListener>> specificPropertyListeners;
+	/** Used for managing property listeners. */
+	protected PropertyChangeSupport properties;
 	/**
 	 * The container keeping track of objects listening for any/all
 	 * <code>Lifecycle</code> types.
@@ -65,6 +57,7 @@ public abstract class DesktopApplication implements IDesktopApplication,
 	 * {@link #installApplicationPreferences()}.
 	 */
 	public DesktopApplication() {
+		properties = new PropertyChangeSupport(this);
 		installApplicationPreferences();
 	}
 
@@ -120,9 +113,35 @@ public abstract class DesktopApplication implements IDesktopApplication,
 		firePropertyChange("application.icon", old, applicationIcon);
 	}
 
+	/**
+	 * {@inheritDoc}
+	 * <p>
+	 * This is equivalent to <code>getApplicationPreferences(null)</code>.
+	 * <p>
+	 * A suggestion for derived classes is to override this method by calling
+	 * {@link #getApplicationPreferences(String)} with a unique path for your
+	 * application.
+	 */
 	@Override
 	public Preferences getApplicationPreferences() {
-		return Preferences.userNodeForPackage(DesktopApplication.class);
+		return getApplicationPreferences(null);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 * <p>
+	 * If <code>node</code> is <code>null</code> then
+	 * {@link Preferences#userRoot()} is returned.
+	 */
+	@Override
+	public Preferences getApplicationPreferences(String node) {
+		Preferences prefs = null;
+		if (node == null) {
+			prefs = Preferences.userRoot();
+		} else {
+			prefs = Preferences.userRoot().node(node);
+		}
+		return prefs;
 	}
 
 	/**
@@ -140,143 +159,125 @@ public abstract class DesktopApplication implements IDesktopApplication,
 	//
 
 	/**
-	 * Adds a <code>PropertyChangeListener</code> to the listener list. The
-	 * <code>listener</code> is registered for all bound properties of this
-	 * class.
-	 * <p>
-	 * <ul>
-	 * <li>{@link #PROPERTY_NETWORK_ADDRESS} with value of
-	 * {@value #PROPERTY_NETWORK_ADDRESS}</li>
-	 * </ul>
-	 * <p>
-	 * If <code>listener</code> is <code>null</code>, no exception is thrown and
-	 * no action is performed.
+	 * Add a PropertyChangeListener to the listener list. The listener is
+	 * registered for all properties. The same listener object may be added more
+	 * than once, and will be called as many times as it is added. If
+	 * <code>listener</code> is <code>null</code>, no exception is thrown and no
+	 * action is taken.
 	 * 
 	 * @param listener
 	 *            the property change listener to be added
 	 */
 	public void addPropertyChangeListener(PropertyChangeListener listener) {
-		// don't instantiate until it's needed
-		propertyListeners = propertyListeners != null ? propertyListeners
-				: new Vector<PropertyChangeListener>();
-		propertyListeners.add(listener);
+		properties.addPropertyChangeListener(listener);
 	}
 
 	/**
-	 * Adds a PropertyChangeListener to the listener list. The listener is
-	 * registered for all bound properties of this class.
-	 * <p>
-	 * <ul>
-	 * <li>{@link #PROPERTY_NETWORK_ADDRESS} with value of
-	 * {@value #PROPERTY_NETWORK_ADDRESS}</li>
-	 * </ul>
-	 * <p>
-	 * If <code>listener</code> is <code>null</code>, no exception is thrown and
-	 * no action is performed
+	 * Add a PropertyChangeListener for a specific property. The listener will
+	 * be invoked only when a call on firePropertyChange names that specific
+	 * property. The same listener object may be added more than once. For each
+	 * property, the listener will be invoked the number of times it was added
+	 * for that property. If <code>propertyName</code> or <code>listener</code>
+	 * is <code>null</code>, no exception is thrown and no action is taken.
 	 * 
+	 * @param propertyName
+	 *            the name of the property to listen on
 	 * @param listener
 	 *            the property change listener to be added
 	 */
 	public void addPropertyChangeListener(String propertyName,
 			PropertyChangeListener listener) {
-		// don't instantiate anything until it's needed
-		specificPropertyListeners = specificPropertyListeners != null ? specificPropertyListeners
-				: new HashMap<String, List<PropertyChangeListener>>();
-		// if a list doesn't exist, create it
-		if (!specificPropertyListeners.containsKey(propertyName)) {
-			specificPropertyListeners.put(propertyName,
-					new Vector<PropertyChangeListener>());
-		}
-		specificPropertyListeners.get(propertyName).add(listener);
+		properties.addPropertyChangeListener(propertyName, listener);
 	}
 
 	/**
 	 * Removes a <code>PropertyChangeListener</code> from the listener list.
-	 * This method should be used to remove <code>PropertyChangeListener</code>s
-	 * that were registered for all bound properties of this class.
-	 * <p>
-	 * If <code>listener</code> is <code>null</code>, no exception is thrown and
-	 * no action is performed.
+	 * This removes a PropertyChangeListener that was registered for all
+	 * properties. If <code>listener</code> was added more than once to the same
+	 * event source, it will be notified one less time after being removed. If
+	 * <code>listener</code> is <code>null</code>, or was never added, no
+	 * exception is thrown and no action is taken.
 	 * 
 	 * @param listener
 	 *            the property change listener to be removed
 	 */
 	public void removePropertyChangeListener(PropertyChangeListener listener) {
-		if (propertyListeners != null && listener != null) {
-			propertyListeners.remove(listener);
-		}
+		properties.removePropertyChangeListener(listener);
 	}
 
 	/**
-	 * Removes a <code>PropertyChangeListener</code> from the listener list for
-	 * a specific property of this class.
-	 * <p>
-	 * If <code>propertyName</code> or <code>listener</code> is
-	 * <code>null</code>, no exception is thrown and no action is performed.
-	 * <p>
-	 * <ul>
-	 * <li>{@link #PROPERTY_NETWORK_ADDRESS} with value of
-	 * {@value #PROPERTY_NETWORK_ADDRESS}</li>
-	 * </ul>
+	 * Remove a PropertyChangeListener for a specific property. If
+	 * <code>listener</code> was added more than once to the same event source
+	 * for the specified property, it will be notified one less time after being
+	 * removed. If <code>propertyName</code> is null, no exception is thrown and
+	 * no action is taken. If <code>listener</code> is <code>null</code>, or was
+	 * never added for the specified property, no exception is thrown and no
+	 * action is taken.
 	 * 
+	 * @param propertyName
+	 *            the name of the property that was listened on
 	 * @param listener
 	 *            the property change listener to be removed
 	 */
 	public void removePropertyChangeListener(String propertyName,
 			PropertyChangeListener listener) {
-		if (specificPropertyListeners != null && listener != null
-				&& specificPropertyListeners.containsKey(propertyName)) {
-			specificPropertyListeners.get(propertyName).remove(listener);
-		}
+		properties.removePropertyChangeListener(propertyName, listener);
 	}
 
 	/**
-	 * Returns the list of all the property change listeners registered for all
-	 * properties of this class.
+	 * Returns an array of all the listeners that were added to the
+	 * PropertyChangeSupport object with addPropertyChangeListener().
 	 * <p>
-	 * <ul>
-	 * <li>{@link #PROPERTY_NETWORK_ADDRESS} with value of
-	 * {@value #PROPERTY_NETWORK_ADDRESS}</li>
-	 * </ul>
+	 * If some listeners have been added with a named property, then the
+	 * returned array will be a mixture of PropertyChangeListeners and
+	 * <code>PropertyChangeListenerProxy</code>s. If the calling method is
+	 * interested in distinguishing the listeners then it must test each element
+	 * to see if it's a <code>PropertyChangeListenerProxy</code>, perform the
+	 * cast, and examine the parameter.
 	 * 
-	 * @return all of this class's <code>PropertyChangeListeners</code> or
-	 *         <code>null</code> if no property change listeners are currently
-	 *         registered
+	 * <pre>
+	 * PropertyChangeListener[] listeners = bean.getPropertyChangeListeners();
+	 * for (int i = 0; i &lt; listeners.length; i++) {
+	 * 	if (listeners[i] instanceof PropertyChangeListenerProxy) {
+	 * 		PropertyChangeListenerProxy proxy = (PropertyChangeListenerProxy) listeners[i];
+	 * 		if (proxy.getPropertyName().equals(&quot;foo&quot;)) {
+	 * 			// proxy is a PropertyChangeListener which was associated
+	 * 			// with the property named &quot;foo&quot;
+	 * 		}
+	 * 	}
+	 * }
+	 * </pre>
+	 * 
+	 * @return all of the <code>PropertyChangeListener</code>s added or an empty
+	 *         array if no listeners have been added
 	 */
-	public List<PropertyChangeListener> getPropertyChangeListeners() {
-		return propertyListeners;
+	public PropertyChangeListener[] getPropertyChangeListeners() {
+		return properties.getPropertyChangeListeners();
 	}
 
 	/**
-	 * Returns the list of all the property change listeners registered for a
-	 * specific property of this class.
-	 * <p>
-	 * <ul>
-	 * <li>{@link #PROPERTY_NETWORK_ADDRESS} with value of
-	 * {@value #PROPERTY_NETWORK_ADDRESS}</li>
-	 * </ul>
+	 * Returns an array of all the listeners which have been associated with the
+	 * named property.
 	 * 
-	 * @return all of this class's <code>PropertyChangeListeners</code> for the
-	 *         specified <code>propertyName</code> or <code>null</code> if no
-	 *         property change listeners are currently registered
+	 * @param propertyName
+	 *            the name of the property being listened to
+	 * @return all of the <code>PropertyChangeListeners</code> associated with
+	 *         the named property. If no such listeners have been added, or if
+	 *         <code>propertyName</code> is <code>null</code>, an empty array is
+	 *         returned.
 	 */
-	public List<PropertyChangeListener> getPropertyChangeListeners(
+	public PropertyChangeListener[] getPropertyChangeListeners(
 			String propertyName) {
-		return specificPropertyListeners.get(propertyName);
+		return properties.getPropertyChangeListeners(propertyName);
 	}
 
 	/**
-	 * Handles notifying the property listeners for the specific
-	 * <code>propertyName</code>.
+	 * Report a bound property update to any registered listeners. No event is
+	 * fired if old and new are equal and non-null.
 	 * <p>
-	 * This notifies both listeners for all properties as well as listeners for
-	 * a specific property. Specific property listeners are notified before
-	 * listeners for all properties.
-	 * <p>
-	 * <ul>
-	 * <li>{@link #PROPERTY_NETWORK_ADDRESS} with value of
-	 * {@value #PROPERTY_NETWORK_ADDRESS}</li>
-	 * </ul>
+	 * This is merely a convenience wrapper around the more general
+	 * firePropertyChange method that takes <code>PropertyChangeEvent</code>
+	 * value.
 	 * 
 	 * @param propertyName
 	 *            one of the property names listed above
@@ -287,22 +288,7 @@ public abstract class DesktopApplication implements IDesktopApplication,
 	 */
 	protected void firePropertyChange(String propertyName, Object oldValue,
 			Object newValue) {
-		// notify listeners for specific properties
-		if (specificPropertyListeners != null
-				&& specificPropertyListeners.containsKey(propertyName)) {
-			for (PropertyChangeListener l : specificPropertyListeners
-					.get(propertyName)) {
-				l.propertyChange(new PropertyChangeEvent(this, propertyName,
-						oldValue, newValue));
-			}
-		}
-		if (propertyListeners != null) {
-			// notify listeners for all properties
-			for (PropertyChangeListener l : propertyListeners) {
-				l.propertyChange(new PropertyChangeEvent(this, propertyName,
-						oldValue, newValue));
-			}
-		}
+		properties.firePropertyChange(propertyName, oldValue, newValue);
 	}
 
 	//

@@ -1,9 +1,9 @@
 package example.javamvc;
 
-import java.awt.Dimension;
-import java.awt.Point;
+import java.awt.Container;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.util.prefs.Preferences;
 
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
@@ -21,10 +21,11 @@ import org.javamvc.Lifecycle;
  */
 public class TestGUIApplication extends GUIApplication {
 
-	private static final String PREFERENCE_LOCATION_X = "window.location.x";
-	private static final String PREFERENCE_LOCATION_Y = "window.location.y";
-	private static final String PREFERENCE_SIZE_WIDTH = "window.size.width";
-	private static final String PREFERENCE_SIZE_HEIGHT = "window.size.height";
+	/**
+	 * The application version. This should be incremented prior to each
+	 * release.
+	 */
+	public static final String VERSION = "0.1";
 
 	/**
 	 * Constructs a default <code>TestGUIApplication</code> which sets the main
@@ -32,33 +33,27 @@ public class TestGUIApplication extends GUIApplication {
 	 */
 	public TestGUIApplication() {
 		super(new JFrame());
-		init();
 	}
 
-	private void init() {
-		JFrame frame = (JFrame) getApplicationWindow();
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+	@Override
+	protected void initializeWindow(Container applicationWindow) {
+		super.initializeWindow(applicationWindow);
+		JFrame frame = (JFrame) applicationWindow;
 		// a window listener must be implemented to call
 		// DesktopApplication.exit() in order for our overridden exit() method
 		// to be called and save our preferences
 		frame.addWindowListener(new WindowAdapter() {
 			@Override
 			public void windowClosing(WindowEvent e) {
-				exit();
+				exit(0);
 			}
 
 			@Override
 			public void windowClosed(WindowEvent e) {
-				exit();
+				exit(0);
 			}
 		});
 		frame.setTitle("Test Application");
-		frame.setPreferredSize(new Dimension(getApplicationPreferences()
-				.getInt(PREFERENCE_SIZE_WIDTH, 100),
-				getApplicationPreferences().getInt(PREFERENCE_SIZE_HEIGHT, 100)));
-		frame.setLocation(new Point(getApplicationPreferences().getInt(
-				PREFERENCE_LOCATION_X, 100), getApplicationPreferences()
-				.getInt(PREFERENCE_LOCATION_Y, 100)));
 		setApplicationIcon(new ImageIcon(TestGUIApplication.class
 				.getClassLoader().getResource(
 						"example/resources/application-icon.png")));
@@ -66,30 +61,29 @@ public class TestGUIApplication extends GUIApplication {
 	}
 
 	@Override
+	public Preferences getApplicationPreferences() {
+		return getApplicationPreferences("test-gui-application");
+	}
+
+	@Override
 	public void exit(int code) {
 		fireLifecycleChange(Lifecycle.STOPPING);
 		// save preferences
 		if (getApplicationWindow().getSize() != null) {
-			getApplicationPreferences().putInt(PREFERENCE_SIZE_WIDTH,
+			getApplicationPreferences().putInt("window.size.width",
 					getApplicationWindow().getSize().width);
-			getApplicationPreferences().putInt(PREFERENCE_SIZE_HEIGHT,
+			getApplicationPreferences().putInt("window.size.height",
 					getApplicationWindow().getSize().height);
 		}
 		if (getApplicationWindow().getLocation() != null) {
-			getApplicationPreferences().putInt(PREFERENCE_LOCATION_X,
+			getApplicationPreferences().putInt("window.location.x",
 					getApplicationWindow().getLocation().x);
-			getApplicationPreferences().putInt(PREFERENCE_LOCATION_Y,
+			getApplicationPreferences().putInt("window.location.y",
 					getApplicationWindow().getLocation().y);
 		}
 		fireLifecycleChange(Lifecycle.STOPPED);
 		System.exit(code);
 	}
-
-	/**
-	 * The application version. This should be incremented prior to each
-	 * release.
-	 */
-	public static final String VERSION = "0.1";
 
 	@Override
 	public String getVersion() {

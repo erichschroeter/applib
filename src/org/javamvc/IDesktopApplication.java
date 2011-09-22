@@ -106,8 +106,23 @@ public interface IDesktopApplication {
 	 * This may include preferences such as the last known window size, last
 	 * known location, whether the window was maximized in the last instance.
 	 * 
+	 * @see #getApplicationPreferences(String)
 	 * @return the application preferences
 	 */
 	public Preferences getApplicationPreferences();
+
+	/**
+	 * Returns the preferences for this application for the specified
+	 * preferences <code>node</code>.
+	 * <p>
+	 * This may include preferences such as the last known window size, last
+	 * known location, whether the window was maximized in the last instance.
+	 * 
+	 * @see #getApplicationPreferences()
+	 * @param node
+	 *            the preferences node
+	 * @return the application preferences for the specified <code>node</code>
+	 */
+	public Preferences getApplicationPreferences(String node);
 
 }

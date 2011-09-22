@@ -4,6 +4,7 @@ import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.Point;
 import java.awt.Window;
+import java.util.prefs.Preferences;
 
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
@@ -52,9 +53,7 @@ public abstract class GUIApplication extends DesktopApplication {
 	/**
 	 * Constructs a default <code>GUIApplication</code>.
 	 * <p>
-	 * <em><b>Note:</b> the application window will return
-	 * <code>null</code> until you specify it with 
-	 * {@link #setApplicationWindow(Container)}.</em>
+	 * This is equivalent to <code>GUIApplication(new JFrame())</code>.
 	 */
 	public GUIApplication() {
 		this(new JFrame());
@@ -73,17 +72,31 @@ public abstract class GUIApplication extends DesktopApplication {
 	 *            the object to use as the main application window
 	 */
 	public GUIApplication(Container applicationWindow) {
+		super(); // initialize preferences
 		setApplicationWindow(applicationWindow);
-		initializeWindow();
+		initializeWindow(applicationWindow);
 	}
 
 	/**
 	 * Initializes the desktop application window. This can be overridden in
 	 * derived classes to customize the window further. Make sure to call
-	 * <code>super.initializeWindow()</code> to ensure the default
-	 * initialization values are kept.
+	 * <code>super.initializeWindow(applicationWindow)</code> to ensure the
+	 * default initialization values are kept.
+	 * <p>
+	 * The default initialization handles
+	 * <ul>
+	 * <li>sets the preferred size to values of application preferences for
+	 * <code>"window.size.width"</code> and <code>"window.size.height"</code></li>
+	 * <li>sets the default location to values of application preferences for
+	 * <code>"window.location.x"</code> and <code>"window.location.y"</code></li>
+	 * <li>if {@link #applicationWindow} is a {@link JFrame} the default close
+	 * operation is set to {@link JFrame#EXIT_ON_CLOSE}</li>
+	 * </ul>
+	 * 
+	 * @param applicationWindow
+	 *            the application window to initialize
 	 */
-	protected void initializeWindow() {
+	protected void initializeWindow(Container applicationWindow) {
 		if (applicationWindow instanceof JFrame) {
 			((JFrame) applicationWindow)
 					.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -96,13 +109,29 @@ public abstract class GUIApplication extends DesktopApplication {
 				.getInt("window.location.y", 100)));
 	}
 
+	/**
+	 * {@inheritDoc}
+	 * <p>
+	 * The default implementation will only set a preference value if there is
+	 * no existing preference value. See the class documentation for preferences
+	 * and default values.
+	 */
 	@Override
 	protected void installApplicationPreferences() {
 		super.installApplicationPreferences();
-		getApplicationPreferences().putInt("window.location.x", 100);
-		getApplicationPreferences().putInt("window.location.y", 100);
-		getApplicationPreferences().putInt("window.size.width", 100);
-		getApplicationPreferences().putInt("window.size.height", 100);
+		Preferences p = getApplicationPreferences();
+		if (p.get("window.location.x", null) == null) {
+			p.putInt("window.location.x", 100);
+		}
+		if (p.get("window.location.y", null) == null) {
+			p.putInt("window.location.y", 100);
+		}
+		if (p.get("window.size.width", null) == null) {
+			p.putInt("window.size.width", 100);
+		}
+		if (p.get("window.size.height", null) == null) {
+			p.putInt("window.size.height", 100);
+		}
 	}
 
 	/**
@@ -158,7 +187,9 @@ public abstract class GUIApplication extends DesktopApplication {
 	}
 
 	/**
-	 * Starts the application. This is equivalent to <code>run(null)</code>.
+	 * Starts the application.
+	 * <p>
+	 * This is equivalent to <code>run(null)</code>.
 	 */
 	@Override
 	public void run() {
@@ -167,12 +198,22 @@ public abstract class GUIApplication extends DesktopApplication {
 
 	/**
 	 * Starts the application with the specified <code>args</code>. This method
-	 * handles the following
+	 * should handle the following
 	 * <ul>
 	 * <li>processing the <code>args</code></li>
 	 * <li>invoking application life cycle events</li>
 	 * <li>showing the application GUI</li>
 	 * </ul>
+	 * <p>
+	 * The default implementation of this is
+	 * 
+	 * <pre>
+	 * fireLifecycleChange(Lifecycle.STARTING);
+	 * if (getApplicationWindow() != null) {
+	 * 	getApplicationWindow().setVisible(true);
+	 * }
+	 * fireLifecycleChange(Lifecycle.STARTED);
+	 * </pre>
 	 * 
 	 * @param args
 	 *            arguments from the command line

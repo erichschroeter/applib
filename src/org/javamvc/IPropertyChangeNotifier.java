@@ -1,7 +1,6 @@
 package org.javamvc;
 
 import java.beans.PropertyChangeListener;
-import java.util.List;
 
 /**
  * The <code>PropertyChangeNotifier</code> interface provides methods for
@@ -50,185 +49,147 @@ import java.util.List;
  * <pre>
  *  {@code
  *  
- * 	/** The property string used when the {&#064;link #address} changes *&#047;
- * 	public static final String PROPERTY_NETWORK_ADDRESS = "CHANGE_ME";
+ * 	
+ * 	/** Used for managing property listeners. *&#047;
+ * 	protected PropertyChangeSupport properties;
  * 
  * 	//
  * 	// PropertyChangeNotifier members
  * 	//
- *
- *  	/**
- *  	 * The container keeping track of objects listening for any/all property
- *  	 * changes.
- * 	 *&#047;
- * 	protected List&lt;PropertyChangeListener&gt; propertyListeners;
- * 	/**
- *  	 * The container keeping track of objects listening for specific property
- *  	 * changes.
- * 	 *&#047;
- * 	protected Map&lt;String, List&lt;PropertyChangeListener&gt;&gt; specificPropertyListeners;
- * 	
- * 	/**
- * 	 * Adds a &lt;code&gt;PropertyChangeListener&lt;/code&gt; to the listener list. The &lt;code&gt;listener&lt;/code&gt; is
- * 	 * registered for all bound properties of this class.
- * 	 * &lt;p&gt;
- * 	 * &lt;ul&gt;
- * 	 * &lt;li&gt;{&#064;link #PROPERTY_NETWORK_ADDRESS} with value of
- * 	 * {&#064;value #PROPERTY_NETWORK_ADDRESS}&lt;/li&gt;
- * 	 * &lt;/ul&gt;
- * 	 * &lt;p&gt;
- * 	 * If &lt;code&gt;listener&lt;/code&gt; is &lt;code&gt;null&lt;/code&gt;, no exception is
- * 	 * thrown and no action is performed.
- * 	 * 
- * 	 * &#064;param listener
- * 	 *            the property change listener to be added
- * 	 *&#047;
- * 	public void addPropertyChangeListener(PropertyChangeListener listener) {
- * 		// don't instantiate until it's needed
- * 		propertyListeners = propertyListeners != null ? propertyListeners
- * 				: new Vector&lt;PropertyChangeListener&gt;();
- * 		propertyListeners.add(listener);
- * 	}
  * 
- * 	/**
- * 	 * Adds a PropertyChangeListener to the listener list. The listener is
- * 	 * registered for all bound properties of this class.
- * 	 * &lt;p&gt;
- * 	 * &lt;ul&gt;
- * 	 * &lt;li&gt;{&#064;link #PROPERTY_NETWORK_ADDRESS} with value of
- * 	 * {&#064;value #PROPERTY_NETWORK_ADDRESS}&lt;/li&gt;
- * 	 * &lt;/ul&gt;
- * 	 * &lt;p&gt;
- * 	 * If &lt;code&gt;listener&lt;/code&gt; is &lt;code&gt;null&lt;/code&gt;, no exception is thrown and
- * 	 * no action is performed
- * 	 * 
- * 	 * &#064;param listener
- * 	 *         the property change listener to be added
- * 	 *&#047;
- * 	public void addPropertyChangeListener(String propertyName,
- * 			PropertyChangeListener listener) {
- * 		// don't instantiate anything until it's needed
- * 		specificPropertyListeners = specificPropertyListeners != null ? specificPropertyListeners
- * 				: new HashMap&lt;String, List&lt;PropertyChangeListener&gt;&gt;();
- * 		// if a list doesn't exist, create it
- * 		if (!specificPropertyListeners.containsKey(propertyName)) {
- * 			specificPropertyListeners.put(propertyName,
- * 					new Vector&lt;PropertyChangeListener&gt;());
- * 		}
- * 		specificPropertyListeners.get(propertyName).add(listener);
- * 	}
+ * /**
+ *  * Add a PropertyChangeListener to the listener list. The listener is
+ *  * registered for all properties. The same listener object may be added more
+ *  * than once, and will be called as many times as it is added. If
+ *  * &lt;code&gt;listener&lt;/code&gt; is &lt;code&gt;null&lt;/code&gt;, no exception is thrown and no
+ *  * action is taken.
+ *  * 
+ *  * @param listener
+ *  *            the property change listener to be added
+ *  *&#047;
+ * public void addPropertyChangeListener(PropertyChangeListener listener) {
+ * 	properties.addPropertyChangeListener(listener);
+ * }
  * 
- * 	/**
- * 	 * Removes a &lt;code&gt;PropertyChangeListener&lt;/code&gt; from the listener list.
- * 	 * This method should be used to remove &lt;code&gt;PropertyChangeListener&lt;/code&gt;s
- * 	 * that were registered for all bound properties of this class.
- * 	 * &lt;p&gt;
- * 	 * If &lt;code&gt;listener&lt;/code&gt; is &lt;code&gt;null&lt;/code&gt;, no exception is thrown and
- * 	 * no action is performed.
- * 	 * 
- * 	 * &#064;param listener
- * 	 *          the property change listener to be removed
- * 	 *&#047;
- * 	public void removePropertyChangeListener(PropertyChangeListener listener) {
- * 		if (listener != null) {
- * 			propertyListeners.remove(listener);
- * 		}
- * 	}
+ * /**
+ *  * Add a PropertyChangeListener for a specific property. The listener will
+ *  * be invoked only when a call on firePropertyChange names that specific
+ *  * property. The same listener object may be added more than once. For each
+ *  * property, the listener will be invoked the number of times it was added
+ *  * for that property. If &lt;code&gt;propertyName&lt;/code&gt; or &lt;code&gt;listener&lt;/code&gt;
+ *  * is &lt;code&gt;null&lt;/code&gt;, no exception is thrown and no action is taken.
+ *  * 
+ *  * @param propertyName
+ *  *            the name of the property to listen on
+ *  * @param listener
+ *  *            the property change listener to be added
+ *  *&#047;
+ * public void addPropertyChangeListener(String propertyName,
+ * 		PropertyChangeListener listener) {
+ * 	properties.addPropertyChangeListener(propertyName, listener);
+ * }
  * 
- * 	/**
- * 	 * Removes a &lt;code&gt;PropertyChangeListener&lt;/code&gt; from the listener list for
- * 	 * a specific property of this class.
- * 	 * &lt;p&gt;
- * 	 * If &lt;code&gt;propertyName&lt;/code&gt; or &lt;code&gt;listener&lt;/code&gt; is
- * 	 * &lt;code&gt;null&lt;/code&gt;, no exception is thrown and no action is performed.
- * 	 * &lt;p&gt;
- * 	 * &lt;ul&gt;
- * 	 * &lt;li&gt;{&#064;link #PROPERTY_NETWORK_ADDRESS} with value of
- * 	 * {&#064;value #PROPERTY_NETWORK_ADDRESS}&lt;/li&gt;
- * 	 * &lt;/ul&gt;
- * 	 * 
- * 	 * &#064;param listener
- * 	 *         the property change listener to be removed
- * 	 *&#047;
- * 	public void removePropertyChangeListener(String propertyName,
- * 			PropertyChangeListener listener) {
- * 		if (listener != null
- * 				&& specificPropertyListeners.containsKey(propertyName)) {
- * 			specificPropertyListeners.get(propertyName).remove(listener);
- * 		}
- * 	}
+ * /**
+ *  * Removes a &lt;code&gt;PropertyChangeListener&lt;/code&gt; from the listener list.
+ *  * This removes a PropertyChangeListener that was registered for all
+ *  * properties. If &lt;code&gt;listener&lt;/code&gt; was added more than once to the same
+ *  * event source, it will be notified one less time after being removed. If
+ *  * &lt;code&gt;listener&lt;/code&gt; is &lt;code&gt;null&lt;/code&gt;, or was never added, no
+ *  * exception is thrown and no action is taken.
+ *  * 
+ *  * @param listener
+ *  *            the property change listener to be removed
+ *  *&#047;
+ * public void removePropertyChangeListener(PropertyChangeListener listener) {
+ * 	properties.removePropertyChangeListener(listener);
+ * }
  * 
- * 	/**
- * 	 * Returns the list of all the property change listeners registered for all
- * 	 * properties of this class.
- * 	 * &lt;p&gt;
- * 	 * &lt;ul&gt;
- * 	 * &lt;li&gt;{&#064;link #PROPERTY_NETWORK_ADDRESS} with value of
- * 	 * {&#064;value #PROPERTY_NETWORK_ADDRESS}&lt;/li&gt;
- * 	 * &lt;/ul&gt;
- * 	 * 
- * 	 * &#064;return all of this class's &lt;code&gt;PropertyChangeListeners&lt;/code&gt; or
- * 	 *      &lt;code&gt;null&lt;/code&gt; if no property change listeners are currently
- * 	 *      registered
- * 	 *&#047;
- * 	public List&lt;PropertyChangeListener&gt; getPropertyChangeListeners() {
- * 		return propertyListeners;
- * 	}
+ * /**
+ *  * Remove a PropertyChangeListener for a specific property. If
+ *  * &lt;code&gt;listener&lt;/code&gt; was added more than once to the same event source
+ *  * for the specified property, it will be notified one less time after being
+ *  * removed. If &lt;code&gt;propertyName&lt;/code&gt; is null, no exception is thrown and
+ *  * no action is taken. If &lt;code&gt;listener&lt;/code&gt; is &lt;code&gt;null&lt;/code&gt;, or was
+ *  * never added for the specified property, no exception is thrown and no
+ *  * action is taken.
+ *  * 
+ *  * @param propertyName
+ *  *            the name of the property that was listened on
+ *  * @param listener
+ *  *            the property change listener to be removed
+ *  *&#047;
+ * public void removePropertyChangeListener(String propertyName,
+ * 		PropertyChangeListener listener) {
+ * 	properties.removePropertyChangeListener(propertyName, listener);
+ * }
  * 
- * 	/**
- * 	 * Returns the list of all the property change listeners registered for a
- * 	 * specific property of this class.
- * 	 * &lt;p&gt;
- * 	 * &lt;ul&gt;
- * 	 * &lt;li&gt;{&#064;link #PROPERTY_NETWORK_ADDRESS} with value of
- * 	 * {&#064;value #PROPERTY_NETWORK_ADDRESS}&lt;/li&gt;
- * 	 * &lt;/ul&gt;
- * 	 * 
- * 	 * &#064;return all of this class's &lt;code&gt;PropertyChangeListeners&lt;/code&gt; for the
- * 	 *      specified &lt;code&gt;propertyName&lt;/code&gt; or &lt;code&gt;null&lt;/code&gt; if no
- * 	 *      property change listeners are currently registered
- * 	 *&#047;
- * 	public List&lt;PropertyChangeListener&gt; getPropertyChangeListeners(
- * 			String propertyName) {
- * 		return specificPropertyListeners.get(propertyName);
- * 	}
+ * /**
+ *  * Returns an array of all the listeners that were added to the
+ *  * PropertyChangeSupport object with addPropertyChangeListener().
+ *  * &lt;p&gt;
+ *  * If some listeners have been added with a named property, then the
+ *  * returned array will be a mixture of PropertyChangeListeners and
+ *  * &lt;code&gt;PropertyChangeListenerProxy&lt;/code&gt;s. If the calling method is
+ *  * interested in distinguishing the listeners then it must test each element
+ *  * to see if it's a &lt;code&gt;PropertyChangeListenerProxy&lt;/code&gt;, perform the
+ *  * cast, and examine the parameter.
+ *  * 
+ *  * &lt;pre&gt;
+ *  * PropertyChangeListener[] listeners = bean.getPropertyChangeListeners();
+ *  * for (int i = 0; i &lt; listeners.length; i++) {
+ *  * 	if (listeners[i] instanceof PropertyChangeListenerProxy) {
+ *  * 		PropertyChangeListenerProxy proxy = (PropertyChangeListenerProxy) listeners[i];
+ *  * 		if (proxy.getPropertyName().equals(&quot;foo&quot;)) {
+ *  * 			// proxy is a PropertyChangeListener which was associated
+ *  * 			// with the property named &quot;foo&quot;
+ *  * 		}
+ *  * 	}
+ *  * }
+ *  * &lt;/pre&gt;
+ *  * 
+ *  * @return all of the &lt;code&gt;PropertyChangeListener&lt;/code&gt;s added or an empty
+ *  *         array if no listeners have been added
+ *  *&#047;
+ * public PropertyChangeListener[] getPropertyChangeListeners() {
+ * 	return properties.getPropertyChangeListeners();
+ * }
  * 
- * 	/**
- * 	 * Handles notifying the property listeners for the specific
- * 	 * &lt;code&gt;propertyName&lt;/code&gt;.
- * 	 * &lt;p&gt;
- * 	 * This notifies both listeners for all properties as well as listeners for
- * 	 * a specific property. Specific property listeners are notified before
- * 	 * listeners for all properties.
- * 	 * &lt;p&gt;
- * 	 * &lt;ul&gt;
- * 	 * &lt;li&gt;{&#064;link #PROPERTY_NETWORK_ADDRESS} with value of
- * 	 * {&#064;value #PROPERTY_NETWORK_ADDRESS}&lt;/li&gt;
- * 	 * &lt;/ul&gt;
- * 	 * 
- * 	 * &#064;param propertyName
- * 	 *         one of the property names listed above
- * 	 * &#064;param oldValue
- * 	 *         the old value of the property
- * 	 * &#064;param newValue
- * 	 *         the new value of the property
- * 	 *&#047;
- * 	protected void firePropertyChange(String propertyName, Object oldValue,
- * 			Object newValue) {
- * 		// notify listeners for specific properties
- * 		if (specificPropertyListeners.containsKey(propertyName)) {
- * 			for (PropertyChangeListener l : specificPropertyListeners
- * 					.get(propertyName)) {
- * 				l.propertyChange(new PropertyChangeEvent(this, propertyName,
- * 						oldValue, newValue));
- * 			}
- * 		}
- * 		// notify listeners for all properties
- * 		for (PropertyChangeListener l : propertyListeners) {
- * 			l.propertyChange(new PropertyChangeEvent(this, propertyName,
- * 					oldValue, newValue));
- * 		}
- * 	}
+ * /**
+ *  * Returns an array of all the listeners which have been associated with the
+ *  * named property.
+ *  * 
+ *  * @param propertyName
+ *  *            the name of the property being listened to
+ *  * @return all of the &lt;code&gt;PropertyChangeListeners&lt;/code&gt; associated with
+ *  *         the named property. If no such listeners have been added, or if
+ *  *         &lt;code&gt;propertyName&lt;/code&gt; is &lt;code&gt;null&lt;/code&gt;, an empty array is
+ *  *         returned.
+ *  *&#047;
+ * public PropertyChangeListener[] getPropertyChangeListeners(
+ * 		String propertyName) {
+ * 	return properties.getPropertyChangeListeners(propertyName);
+ * }
+ * 
+ * /**
+ *  * Report a bound property update to any registered listeners. No event is
+ *  * fired if old and new are equal and non-null.
+ *  * &lt;p&gt;
+ *  * This is merely a convenience wrapper around the more general
+ *  * firePropertyChange method that takes &lt;code&gt;PropertyChangeEvent&lt;/code&gt;
+ *  * value.
+ *  * 
+ *  * @param propertyName
+ *  *            one of the property names listed above
+ *  * @param oldValue
+ *  *            the old value of the property
+ *  * @param newValue
+ *  *            the new value of the property
+ *  *&#047;
+ * protected void firePropertyChange(String propertyName, Object oldValue,
+ * 		Object newValue) {
+ * 	properties.firePropertyChange(propertyName, oldValue, newValue);
+ * }
+ * 
  * </pre>
  * 
  * @author Erich Schroeter
@@ -312,7 +273,7 @@ public interface IPropertyChangeNotifier {
 	 *         <code>null</code> if no property change listeners are currently
 	 *         registered.
 	 */
-	public List<PropertyChangeListener> getPropertyChangeListeners();
+	public PropertyChangeListener[] getPropertyChangeListeners();
 
 	/**
 	 * Returns the list of all the property change listeners registered for a
@@ -328,7 +289,7 @@ public interface IPropertyChangeNotifier {
 	 *         <code>null</code> if no property change listeners are currently
 	 *         registered.
 	 */
-	public List<PropertyChangeListener> getPropertyChangeListeners(
+	public PropertyChangeListener[] getPropertyChangeListeners(
 			String propertyName);
 
 }
