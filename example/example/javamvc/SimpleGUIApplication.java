@@ -19,7 +19,7 @@ import org.javamvc.Lifecycle;
  * 
  * @author Erich Schroeter
  */
-public class TestGUIApplication extends GUIApplication {
+public class SimpleGUIApplication extends GUIApplication {
 
 	/**
 	 * The application version. This should be incremented prior to each
@@ -31,7 +31,7 @@ public class TestGUIApplication extends GUIApplication {
 	 * Constructs a default <code>TestGUIApplication</code> which sets the main
 	 * application window to a <code>JFrame</code>.
 	 */
-	public TestGUIApplication() {
+	public SimpleGUIApplication() {
 		super(new JFrame());
 	}
 
@@ -54,7 +54,7 @@ public class TestGUIApplication extends GUIApplication {
 			}
 		});
 		frame.setTitle("Test Application");
-		setApplicationIcon(new ImageIcon(TestGUIApplication.class
+		setApplicationIcon(new ImageIcon(SimpleGUIApplication.class
 				.getClassLoader().getResource(
 						"example/resources/application-icon.png")));
 		frame.pack();
@@ -99,7 +99,7 @@ public class TestGUIApplication extends GUIApplication {
 				} catch (Exception exception) {
 					exception.printStackTrace();
 				}
-				new TestGUIApplication().run();
+				new SimpleGUIApplication().run();
 			}
 		});
 	}

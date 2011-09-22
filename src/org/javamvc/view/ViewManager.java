@@ -1,7 +1,9 @@
 package org.javamvc.view;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.Vector;
 
 /**
  * A <code>ViewManager</code> manages multiple views for an application. It
@@ -19,9 +21,12 @@ public class ViewManager {
 	 * being used.
 	 */
 	private boolean autoUnregister;
+	/** The listeners to be notified when a management event is fired. */
+	private List<ViewManagerListener> listeners;
 
 	public ViewManager() {
 		views = new HashMap<String, View>();
+		listeners = new Vector<ViewManagerListener>();
 	}
 
 	/**
@@ -60,6 +65,18 @@ public class ViewManager {
 	}
 
 	/**
+	 * Handles notifying the view manager listeners with the <code>event</code>.
+	 * 
+	 * @param event
+	 *            the event to pass to the listeners
+	 */
+	protected void fireViewManagedEvent(ViewManagedEvent event) {
+		for (ViewManagerListener l : listeners) {
+			l.wasManaged(event);
+		}
+	}
+
+	/**
 	 * Registers the <code>view</code> with the view manager. The
 	 * <code>key</code> should be used for accessing the <code>view</code>.
 	 * <p>
@@ -67,6 +84,8 @@ public class ViewManager {
 	 * already, the mapped view will be unregistered before registering the
 	 * specified <code>view</code>. If auto unregister is disabled (default),
 	 * then nothing changes.
+	 * <p>
+	 * A {@link ViewManagedEvent} is fired when successfully registered.
 	 * 
 	 * @param key
 	 *            the key to access the <code>view</code> in the view manager
@@ -77,18 +96,35 @@ public class ViewManager {
 		if (!views.containsKey(key)) {
 			// key not being used, so simply add to the map
 			views.put(key, view);
+			fireViewManagedEvent(new ViewManagedEvent(this, view,
+					ViewManagedEvent.REGISTERED));
 		} else {
 			// key being used by another view, so we have to unregister it if
 			// we are going to use the same key
 			if (isAutoUnregister()) {
 				unregisterView(key);
 				views.put(key, view);
+				fireViewManagedEvent(new ViewManagedEvent(this, view,
+						ViewManagedEvent.REGISTERED));
 			}
 		}
 	}
 
+	/**
+	 * Unregisters the mapping between the <code>key</code> and the {@link View}
+	 * it was mapped to.
+	 * <p>
+	 * A {@link ViewManagedEvent} is fired when successfully unregistered.
+	 * 
+	 * @param key
+	 *            the key currently mapped to a view
+	 */
 	public void unregisterView(String key) {
-		// TODO send event
+		if (views.containsKey(key)) {
+			View view = views.remove(key);
+			fireViewManagedEvent(new ViewManagedEvent(this, view,
+					ViewManagedEvent.UNREGISTERED));
+		}
 	}
 
 }
