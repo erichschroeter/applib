@@ -21,23 +21,38 @@ import javax.swing.JFrame;
  * <th>Property</th>
  * <th>Description</th>
  * </tr>
+ * </thead><tbody> </tbody>
+ * </table>
+ * <p>
+ * The preferences used in this class are in the table below.
+ * <table>
+ * <thead>
+ * <tr>
+ * <th>Preference</th>
+ * <th>Default</th>
+ * <th>Description</th>
+ * </tr>
  * </thead><tbody>
  * <tr>
  * <td><code>"window.location.x"</code></td>
+ * <td>100</td>
  * <td>The number of pixels to the right from the top left of the screen the
  * window will position itself on startup</td>
  * </tr>
  * <tr>
  * <td><code>"window.location.y"</code></td>
+ * <td>100</td>
  * <td>The number of pixels down from the top left of the screen the window will
  * position itself on startup</td>
  * </tr>
  * <tr>
  * <td><code>"window.size.width"</code></td>
+ * <td>100</td>
  * <td>The number of pixels wide the window will be on startup</td>
  * </tr>
  * <tr>
  * <td><code>"window.size.height"</code></td>
+ * <td>100</td>
  * <td>The number of pixels high the window will be on startup</td>
  * </tr>
  * </tbody>
@@ -167,12 +182,16 @@ public abstract class GUIApplication extends DesktopApplication {
 	 * maximized.
 	 * 
 	 * @return <code>true</code> if maximized, else <code>false</code>
+	 * @throws NotSupportedException
+	 *             if the {@link #applicationWindow} is not supported for this
+	 *             function
 	 */
-	public boolean isMaximized() {
+	public boolean isMaximized() throws NotSupportedException {
 		if (getApplicationWindow() instanceof JFrame) {
 			return (((JFrame) getApplicationWindow()).getExtendedState() & JFrame.MAXIMIZED_BOTH) == JFrame.MAXIMIZED_BOTH;
+		} else {
+			throw new NotSupportedException();
 		}
-		return false;
 	}
 
 	@Override

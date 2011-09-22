@@ -1,6 +1,8 @@
-package org.javamvc;
+package org.javamvc.view;
 
 import javax.swing.JPanel;
+
+import org.javamvc.GUIApplication;
 
 /**
  * A <code>View</code>
