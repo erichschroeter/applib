@@ -13,14 +13,26 @@ import javax.swing.Icon;
 /**
  * <code>DesktopApplication</code> provides a default implementation of the
  * {@link IDesktopApplication} interface.
+ * <p>
+ * The properties available in this class are in the table below.
+ * <table>
+ * <thead>
+ * <tr>
+ * <th>Property</th>
+ * <th>Description</th>
+ * </tr>
+ * </thead><tbody>
+ * <tr>
+ * <td><code>"application.icon"</code></td>
+ * <td>The application icon</td>
+ * </tr>
+ * </tbody>
+ * </table>
  * 
  * @author Erich Schroeter
  */
 public abstract class DesktopApplication implements IDesktopApplication,
 		IPropertyChangeNotifier, ILifecycleNotifier {
-
-	/** The property identifier for the application icon */
-	public static final String PROPERTY_APPLICATION_ICON = "application.icon";
 
 	/**
 	 * The container keeping track of objects listening for any/all property
@@ -46,6 +58,15 @@ public abstract class DesktopApplication implements IDesktopApplication,
 	protected Icon applicationIcon;
 	/** The state of the application in its life cycle. */
 	protected Lifecycle applicationLifecycleState;
+
+	/**
+	 * Constructs a default <code>DesktopApplication</code>. This initializes
+	 * the application preferences by calling
+	 * {@link #installApplicationPreferences()}.
+	 */
+	public DesktopApplication() {
+		installApplicationPreferences();
+	}
 
 	@Override
 	public void exit() {
@@ -96,12 +117,22 @@ public abstract class DesktopApplication implements IDesktopApplication,
 	public void setApplicationIcon(Icon applicationIcon) {
 		Icon old = getApplicationIcon();
 		this.applicationIcon = applicationIcon;
-		firePropertyChange(PROPERTY_APPLICATION_ICON, old, applicationIcon);
+		firePropertyChange("application.icon", old, applicationIcon);
 	}
 
 	@Override
 	public Preferences getApplicationPreferences() {
 		return Preferences.userNodeForPackage(DesktopApplication.class);
+	}
+
+	/**
+	 * Installs the preferences for the desktop application. This can be
+	 * overridden in derived classes to add additional preferences or to
+	 * override the preferences themselves. Make sure to call
+	 * <code>super.installApplicationPreferences()</code> to ensure the default
+	 * preferences are kept.
+	 */
+	protected void installApplicationPreferences() {
 	}
 
 	//

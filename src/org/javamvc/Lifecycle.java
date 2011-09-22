@@ -8,11 +8,22 @@ package org.javamvc;
  */
 public enum Lifecycle {
 	/** Occurs when the application is first starting up. */
-	STARTING,
+	STARTING("STARTING"),
 	/** Occurs when the application has been started. */
-	STARTED,
+	STARTED("STARTED"),
 	/** Occurs when the application begins shutting down. */
-	STOPPING,
+	STOPPING("STOPPING"),
 	/** Occurs when the application has shut down. */
-	STOPPED
+	STOPPED("STOPPED");
+
+	private final String string;
+
+	private Lifecycle(String string) {
+		this.string = string;
+	}
+
+	@Override
+	public String toString() {
+		return string;
+	}
 }

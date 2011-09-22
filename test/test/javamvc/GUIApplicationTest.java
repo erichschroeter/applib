@@ -54,8 +54,7 @@ public class GUIApplicationTest {
 			}
 		};
 		app.addPropertyChangeListener(allListener);
-		app.addPropertyChangeListener(GUIApplication.PROPERTY_APPLICATION_ICON,
-				specificListener);
+		app.addPropertyChangeListener("application.icon", specificListener);
 
 		app.setApplicationIcon(secondIcon);
 	}

@@ -56,7 +56,18 @@ import java.util.List;
  * 	//
  * 	// PropertyChangeNotifier members
  * 	//
- * 
+ *
+ *  	/**
+ *  	 * The container keeping track of objects listening for any/all property
+ *  	 * changes.
+ * 	 *&#047;
+ * 	protected List&lt;PropertyChangeListener&gt; propertyListeners;
+ * 	/**
+ *  	 * The container keeping track of objects listening for specific property
+ *  	 * changes.
+ * 	 *&#047;
+ * 	protected Map&lt;String, List&lt;PropertyChangeListener&gt;&gt; specificPropertyListeners;
+ * 	
  * 	/**
  * 	 * Adds a &lt;code&gt;PropertyChangeListener&lt;/code&gt; to the listener list. The &lt;code&gt;listener&lt;/code&gt; is
  * 	 * registered for all bound properties of this class.
@@ -102,7 +113,7 @@ import java.util.List;
  * 		// if a list doesn't exist, create it
  * 		if (!specificPropertyListeners.containsKey(propertyName)) {
  * 			specificPropertyListeners.put(propertyName,
- * 					new Vector<&lt;PropertyChangeListener&gt;());
+ * 					new Vector&lt;PropertyChangeListener&gt;());
  * 		}
  * 		specificPropertyListeners.get(propertyName).add(listener);
  * 	}
