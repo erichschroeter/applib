@@ -27,7 +27,7 @@ public abstract class View<C extends Component> {
 	/**
 	 * Constructs a <code>View</code> specifying the application the view
 	 * belongs to and the view component. This initializes the view by calling
-	 * {@link #initializeView())}.
+	 * {@link #initializeView()}.
 	 * 
 	 * @param app
 	 *            the application this view belongs to

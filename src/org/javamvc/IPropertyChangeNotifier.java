@@ -189,7 +189,7 @@ import java.beans.PropertyChangeListener;
  * 		Object newValue) {
  * 	properties.firePropertyChange(propertyName, oldValue, newValue);
  * }
- * 
+ * }
  * </pre>
  * 
  * @author Erich Schroeter

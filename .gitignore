@@ -1,8 +1,25 @@
-# directories
-build/
-bin/
+# Compiled sources
+#####################
+*.class
+*.classpath
+*.project
 
-# files
-.classpath
-.project
-.settings
+# Directories
+####################
+classes/
+bin/
+tmp/
+junit/
+jar/
+javadoc/
+
+# OS generated files
+#####################
+.DS_Store?
+ehthumbs.db
+Icon?
+Thumbs.db
+
+# Other
+#####################
+.gitignore
