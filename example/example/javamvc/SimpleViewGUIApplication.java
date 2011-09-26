@@ -15,7 +15,9 @@ import org.javamvc.GUIApplication;
 import org.javamvc.ILifecycleListener;
 import org.javamvc.Lifecycle;
 import org.javamvc.LifecycleChangeEvent;
+import org.javamvc.model.Model;
 
+import example.javamvc.models.Person;
 import example.javamvc.views.CompanyView;
 import example.javamvc.views.PersonView;
 
@@ -42,6 +44,13 @@ public class SimpleViewGUIApplication extends SimpleGUIApplication {
 		super.initializeWindow(applicationWindow);
 		JFrame frame = (JFrame) applicationWindow;
 		frame.setTitle("Simple View Application");
+	}
+
+	@Override
+	protected void installModels() {
+		Model<Person> personModel = new Model<Person>(new Person("Nikola", "",
+				"Tesla"));
+		register("nikola", personModel);
 	}
 
 	@Override

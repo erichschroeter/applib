@@ -64,6 +64,12 @@ public class SimpleGUIApplication extends MVCDesktopApplication {
 	}
 
 	@Override
+	protected void installModels() {
+		// do nothing since we're not using models for this simple example
+
+	}
+
+	@Override
 	protected void installViews() {
 		// do nothing since we're not using views for this simple example
 	}
@@ -111,4 +117,5 @@ public class SimpleGUIApplication extends MVCDesktopApplication {
 			}
 		});
 	}
+
 }

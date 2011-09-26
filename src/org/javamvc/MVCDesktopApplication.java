@@ -1,9 +1,14 @@
 package org.javamvc;
 
 import java.awt.Container;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.swing.JFrame;
 
+import org.javamvc.model.Model;
+import org.javamvc.model.ModelManager;
+import org.javamvc.view.View;
 import org.javamvc.view.ViewManager;
 
 /**
@@ -16,8 +21,18 @@ import org.javamvc.view.ViewManager;
  */
 public abstract class MVCDesktopApplication extends GUIApplication {
 
+	/** The object managing the application's models. */
+	protected ModelManager modelManager;
 	/** The object managing the application's views. */
 	protected ViewManager viewManager;
+	/** The map of views to models. */
+	private Map<String, String> modelMap;
+	/** The map of view identifiers to models. */
+	private Map<String, Model<?>> modelIdMap;
+	/** The map of models to views. */
+	private Map<String, String> viewMap;
+	/** The map of model identifiers to views. */
+	private Map<String, View<?>> viewIdMap;
 
 	/**
 	 * Constructs a default <code>MVCDesktopApplication</code>.
@@ -42,6 +57,8 @@ public abstract class MVCDesktopApplication extends GUIApplication {
 	 */
 	public MVCDesktopApplication(Container applicationWindow) {
 		super(applicationWindow); // initialize preferences and window
+		modelMap = new HashMap<String, String>();
+		viewMap = new HashMap<String, String>();
 		setViewManager(new ViewManager());
 		installViews();
 	}
@@ -50,6 +67,35 @@ public abstract class MVCDesktopApplication extends GUIApplication {
 	 * Installs the views to be used by the application.
 	 */
 	protected abstract void installViews();
+
+	/**
+	 * Installs the models to be used by the application.
+	 */
+	protected abstract void installModels();
+
+	/**
+	 * Returns the object managing the application's models.
+	 * <p>
+	 * This is provided publicly so classes can register to listen to manager
+	 * events. It is recommended to not use the mutator methods in the
+	 * <code>ModelManager</code> directly and instead use the methods provied by
+	 * {@link MVCDesktopApplication}.
+	 * 
+	 * @return the model manager
+	 */
+	public ModelManager getModelManager() {
+		return modelManager;
+	}
+
+	/**
+	 * Sets the object to manage the application's models.
+	 * 
+	 * @param modelManager
+	 *            the model manager to set
+	 */
+	protected void setModelManager(ModelManager modelManager) {
+		this.modelManager = modelManager;
+	}
 
 	/**
 	 * Returns the object managing the application's views.
@@ -73,6 +119,67 @@ public abstract class MVCDesktopApplication extends GUIApplication {
 	 */
 	protected void setViewManager(ViewManager viewManager) {
 		this.viewManager = viewManager;
+	}
+
+	/**
+	 * Creates a mapping between the model and the view.
+	 * 
+	 * @see #register(String, Model)
+	 * @see #register(String, View)
+	 * @param modelId
+	 *            the model to be mapped to <code>viewId</code>
+	 * @param viewId
+	 *            the view to be mapped to <code>modelId</code>
+	 */
+	public void map(String modelId, String viewId) {
+		modelMap.put(viewId, modelId);
+		viewMap.put(modelId, viewId);
+	}
+
+	/**
+	 * Creates a mapping between the view identifier and the view.
+	 * 
+	 * @param viewId
+	 *            the view identifier to be mapped to <code>view</code>
+	 * @param view
+	 *            the view to be mapped to <code>viewId</code>
+	 */
+	public void register(String viewId, View<?> view) {
+		viewIdMap.put(viewId, view);
+	}
+
+	/**
+	 * Creates a mapping between the model identifier and the model.
+	 * 
+	 * @param modelId
+	 *            the model identifier to be mapped to <code>model</code>
+	 * @param model
+	 *            the model to be mapped to <code>modelId</code>
+	 */
+	public void register(String modelId, Model<?> model) {
+		modelIdMap.put(modelId, model);
+	}
+
+	/**
+	 * Returns the model identified by the specified <code>modelId</code>.
+	 * 
+	 * @param modelId
+	 *            the model identifier
+	 * @return the model identified by <code>modelId</code>
+	 */
+	public Model<?> getModel(String modelId) {
+		return modelIdMap.get(modelId);
+	}
+
+	/**
+	 * Returns the view identified by the specified <code>viewId</code>.
+	 * 
+	 * @param viewId
+	 *            the view identifier
+	 * @return the model identified by <code>viewId</code>
+	 */
+	public View<?> getView(String viewId) {
+		return viewIdMap.get(viewId);
 	}
 
 }
