@@ -59,19 +59,33 @@ public abstract class MVCDesktopApplication extends GUIApplication {
 		super(applicationWindow); // initialize preferences and window
 		modelMap = new HashMap<String, String>();
 		viewMap = new HashMap<String, String>();
+		setModelManager(new ModelManager());
 		setViewManager(new ViewManager());
+		installModels();
 		installViews();
 	}
 
 	/**
 	 * Installs the views to be used by the application.
+	 * 
+	 * @see #register(String, View)
 	 */
 	protected abstract void installViews();
 
 	/**
 	 * Installs the models to be used by the application.
+	 * 
+	 * @see #register(String, Model)
 	 */
 	protected abstract void installModels();
+
+	/**
+	 * Maps views and models together. This may be useful to let the framework
+	 * automatically retrieve a view for a specific model.
+	 * 
+	 * @see #map(String, String)
+	 */
+	protected abstract void mapViewsAndModels();
 
 	/**
 	 * Returns the object managing the application's models.
@@ -127,11 +141,22 @@ public abstract class MVCDesktopApplication extends GUIApplication {
 	 * @see #register(String, Model)
 	 * @see #register(String, View)
 	 * @param modelId
-	 *            the model to be mapped to <code>viewId</code>
+	 *            the model identifier to be mapped to <code>viewId</code>
 	 * @param viewId
-	 *            the view to be mapped to <code>modelId</code>
+	 *            the view identifier to be mapped to <code>modelId</code>
+	 * @throws IllegalArgumentException
+	 *             if <code>viewId</code> is not a registered view, or
+	 *             <code>modelId</code> is not a registered model
 	 */
 	public void map(String modelId, String viewId) {
+		if (!viewIdMap.containsKey(viewId)) {
+			throw new IllegalArgumentException(viewId
+					+ " not registered as a view");
+		}
+		if (!modelIdMap.containsKey(modelId)) {
+			throw new IllegalArgumentException(modelId
+					+ " not registered as a model");
+		}
 		modelMap.put(viewId, modelId);
 		viewMap.put(modelId, viewId);
 	}

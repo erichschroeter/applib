@@ -28,6 +28,10 @@ import javax.swing.Icon;
  * </tr>
  * </tbody>
  * </table>
+ * <p>
+ * The application preferences have the ability to automatically be saved upon
+ * exiting the application. To enable this feature use the
+ * {@link DesktopApplication#setSavePreferencesOnExit(boolean)}.
  * 
  * @author Erich Schroeter
  */
@@ -50,6 +54,8 @@ public abstract class DesktopApplication implements IDesktopApplication,
 	protected Icon applicationIcon;
 	/** The state of the application in its life cycle. */
 	protected Lifecycle applicationLifecycleState;
+	/** Whether the preferences will be saved on exiting the application. */
+	private boolean savePreferencesOnExit;
 
 	/**
 	 * Constructs a default <code>DesktopApplication</code>. This initializes
@@ -61,6 +67,15 @@ public abstract class DesktopApplication implements IDesktopApplication,
 		installApplicationPreferences();
 	}
 
+	/**
+	 * Exits the application specifying the error code of 0 to indicate that
+	 * everything is ok. This will automatically save the application
+	 * preferences if the feature is enabled.
+	 * 
+	 * @see #exit(int)
+	 * @see #isSavePreferencesOnExit()
+	 * @see #setSavePreferencesOnExit(boolean)
+	 */
 	@Override
 	public void exit() {
 		exit(0);
@@ -68,24 +83,35 @@ public abstract class DesktopApplication implements IDesktopApplication,
 
 	/**
 	 * Exits the application specifying the error code to print to the console.
-	 * The typical value of <code>code</code> is 0 if everything is ok.
+	 * The typical value of <code>code</code> is 0 if everything is ok. This
+	 * will automatically save the application preferences if the feature is
+	 * enabled.
 	 * <p>
 	 * This is equivalent to
 	 * 
 	 * <pre>
 	 * {@code
 	 *  fireLifecycleChange(Lifecycle.STOPPING);
+	 *  if (isSavePreferencesOnExit()) {
+	 *   saveApplicationPreferences();
+	 *  }
 	 *  fireLifecycleChange(Lifecycle.STOPPED);
 	 *  System.exit(code);
 	 * }
 	 * </pre>
 	 * 
+	 * @see #exit()
+	 * @see #isSavePreferencesOnExit()
+	 * @see #setSavePreferencesOnExit(boolean)
 	 * @param code
 	 *            the error code
 	 */
 	@Override
 	public void exit(int code) {
 		fireLifecycleChange(Lifecycle.STOPPING);
+		if (isSavePreferencesOnExit()) {
+			saveApplicationPreferences();
+		}
 		fireLifecycleChange(Lifecycle.STOPPED);
 		System.exit(code);
 	}
@@ -145,13 +171,53 @@ public abstract class DesktopApplication implements IDesktopApplication,
 	}
 
 	/**
-	 * Installs the preferences for the desktop application. This can be
-	 * overridden in derived classes to add additional preferences or to
-	 * override the preferences themselves. Make sure to call
+	 * Installs the preferences for the desktop application.
+	 * <p>
+	 * This can be overridden in derived classes to add additional preferences
+	 * or to override the preferences themselves. Make sure to call
 	 * <code>super.installApplicationPreferences()</code> to ensure the default
 	 * preferences are kept.
+	 * 
+	 * @see #saveApplicationPreferences()
 	 */
 	protected void installApplicationPreferences() {
+	}
+
+	/**
+	 * Saves the preferences for the desktop application.
+	 * <p>
+	 * This can be overridden in derived classes to save preferences added or
+	 * overridden in derived classes. Make sure to call
+	 * <code>super.installApplicationPreferences()</code> to ensure the default
+	 * preference values are saved.
+	 * 
+	 * @see #installApplicationPreferences()
+	 */
+	protected void saveApplicationPreferences() {
+	}
+
+	/**
+	 * Returns whether the application will save the preferences on exit.
+	 * 
+	 * @see #exit()
+	 * @see #exit(int)
+	 * @return <code>true</code> if they will be saved on exit,
+	 *         <code>false</code> if not
+	 */
+	public boolean isSavePreferencesOnExit() {
+		return savePreferencesOnExit;
+	}
+
+	/**
+	 * Sets whether the application will save the preferences on exit.
+	 * 
+	 * @see #exit()
+	 * @see #exit(int)
+	 * @param enable
+	 *            <code>true</code> to save on exit, <code>false</code> to not
+	 */
+	public void setSavePreferencesOnExit(boolean enable) {
+		this.savePreferencesOnExit = enable;
 	}
 
 	//

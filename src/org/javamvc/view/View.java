@@ -39,7 +39,7 @@ public abstract class View<C extends Component> {
 		setApplication(app);
 		this.view = view;
 		subcomponents = new HashMap<String, Component>();
-		initializeView();
+		initializeView(view);
 	}
 
 	/**
@@ -48,8 +48,11 @@ public abstract class View<C extends Component> {
 	 * derived classes to customize the view further. Make sure to call
 	 * <code>super.initializeView()</code> to ensure the default initialization
 	 * values are kept.
+	 * 
+	 * @param view
+	 *            the view to initialize
 	 */
-	protected abstract void initializeView();
+	protected abstract void initializeView(C view);
 
 	/**
 	 * Returns the view object which, for all intents and purposes, is the view.

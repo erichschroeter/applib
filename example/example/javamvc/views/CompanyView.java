@@ -23,8 +23,7 @@ public class CompanyView extends View<JPanel> {
 	}
 
 	@Override
-	protected void initializeView() {
-		JPanel view = getView();
+	protected void initializeView(JPanel view) {
 		GroupLayout layout = new GroupLayout(view);
 		view.setLayout(layout);
 

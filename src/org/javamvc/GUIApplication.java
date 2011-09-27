@@ -132,6 +132,8 @@ public abstract class GUIApplication extends DesktopApplication {
 	 * The default implementation will only set a preference value if there is
 	 * no existing preference value. See the class documentation for preferences
 	 * and default values.
+	 * 
+	 * @see GUIApplication
 	 */
 	@Override
 	protected void installApplicationPreferences() {
@@ -148,6 +150,32 @@ public abstract class GUIApplication extends DesktopApplication {
 		}
 		if (p.get("window.size.height", null) == null) {
 			p.putInt("window.size.height", 100);
+		}
+	}
+
+	/**
+	 * {@inheritDoc}
+	 * <p>
+	 * The default behavior will save the current values of the preferences
+	 * listed in the class documentation.
+	 * 
+	 * @see GUIApplication
+	 */
+	@Override
+	protected void saveApplicationPreferences() {
+		super.saveApplicationPreferences();
+		Preferences p = getApplicationPreferences();
+		if (getApplicationWindow().getLocation() != null) {
+			p.putInt("window.location.x",
+					getApplicationWindow().getLocation().x);
+			p.putInt("window.location.y",
+					getApplicationWindow().getLocation().y);
+		}
+		if (getApplicationWindow().getSize() != null) {
+			p.putInt("window.size.width",
+					getApplicationWindow().getSize().width);
+			p.putInt("window.size.height",
+					getApplicationWindow().getSize().height);
 		}
 	}
 
@@ -211,6 +239,8 @@ public abstract class GUIApplication extends DesktopApplication {
 	 * Starts the application.
 	 * <p>
 	 * This is equivalent to <code>run(null)</code>.
+	 * 
+	 * @see #run(String[])
 	 */
 	@Override
 	public void run() {

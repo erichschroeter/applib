@@ -75,6 +75,11 @@ public class SimpleGUIApplication extends MVCDesktopApplication {
 	}
 
 	@Override
+	protected void mapViewsAndModels() {
+		// do nothing since we're not using views or models for this simple example
+	}
+
+	@Override
 	public Preferences getApplicationPreferences() {
 		return getApplicationPreferences("simple-gui-application");
 	}
