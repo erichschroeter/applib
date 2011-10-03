@@ -15,7 +15,7 @@ import java.util.Vector;
 public class ModelManager {
 
 	/** The map of model keys to the Model instance. */
-	private Map<String, Model<?>> views;
+	private Map<String, Model<?>> models;
 	/**
 	 * Whether to auto unregister a model when trying to register a key already
 	 * being used.
@@ -25,7 +25,7 @@ public class ModelManager {
 	private List<ModelManagerListener> listeners;
 
 	public ModelManager() {
-		views = new HashMap<String, Model<?>>();
+		models = new HashMap<String, Model<?>>();
 		listeners = new Vector<ModelManagerListener>();
 	}
 
@@ -60,8 +60,8 @@ public class ModelManager {
 	 * @return the mapped model, or <code>null</code> if <code>key</code> 
 	 *         doesn't exist
 	 */
-	public Model<?> getView(String key) {
-		return views.get(key);
+	public Model<?> getModel(String key) {
+		return models.get(key);
 	}
 
 	/**
@@ -75,6 +75,19 @@ public class ModelManager {
 		for (ModelManagerListener l : listeners) {
 			l.wasManaged(event);
 		}
+	}
+
+	/**
+	 * Returns whether the specified <code>key</code> is registered to a
+	 * {@link Model}.
+	 * 
+	 * @param key
+	 *            the model identifier to check
+	 * @return <code>true</code> if <code>key</code> is registered, else
+	 *         <code>false</code>
+	 */
+	public boolean isRegistered(String key) {
+		return models.containsKey(key);
 	}
 
 	/**
@@ -94,9 +107,9 @@ public class ModelManager {
 	 *            the model being mapped to <code>key</code>
 	 */
 	public void registerView(String key, Model<?> model) {
-		if (!views.containsKey(key)) {
+		if (!isRegistered(key)) {
 			// key not being used, so simply add to the map
-			views.put(key, model);
+			models.put(key, model);
 			fireModelManagedEvent(new ModelManagedEvent(this, model,
 					ModelManagedEvent.REGISTERED));
 		} else {
@@ -104,7 +117,7 @@ public class ModelManager {
 			// we are going to use the same key
 			if (isAutoUnregister()) {
 				unregisterView(key);
-				views.put(key, model);
+				models.put(key, model);
 				fireModelManagedEvent(new ModelManagedEvent(this, model,
 						ModelManagedEvent.REGISTERED));
 			}
@@ -121,8 +134,8 @@ public class ModelManager {
 	 *            the key currently mapped to a model
 	 */
 	public void unregisterView(String key) {
-		if (views.containsKey(key)) {
-			Model<?> model = views.remove(key);
+		if (isRegistered(key)) {
+			Model<?> model = models.remove(key);
 			fireModelManagedEvent(new ModelManagedEvent(this, model,
 					ModelManagedEvent.UNREGISTERED));
 		}

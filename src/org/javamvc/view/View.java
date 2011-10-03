@@ -29,13 +29,14 @@ public abstract class View<C extends Component> {
 	 * belongs to and the view component. This initializes the view by calling
 	 * {@link #initializeView()}.
 	 * 
+	 * @see #setApplication(GUIApplication)
+	 * @see #initializeView(Component)
 	 * @param app
 	 *            the application this view belongs to
 	 * @param view
 	 *            the view component to be displayed on screen
 	 */
 	public View(GUIApplication app, C view) {
-		super();
 		setApplication(app);
 		this.view = view;
 		subcomponents = new HashMap<String, Component>();

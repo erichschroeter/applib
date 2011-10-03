@@ -60,11 +60,15 @@ public abstract class DesktopApplication implements IDesktopApplication,
 	/**
 	 * Constructs a default <code>DesktopApplication</code>. This initializes
 	 * the application preferences by calling
-	 * {@link #installApplicationPreferences()}.
+	 * {@link #installApplicationPreferences(Preferences)} passing the result of
+	 * {@link #getApplicationPreferences()}.
+	 * 
+	 * @see #getApplicationPreferences()
+	 * @see #installApplicationPreferences(Preferences)
 	 */
 	public DesktopApplication() {
 		properties = new PropertyChangeSupport(this);
-		installApplicationPreferences();
+		installApplicationPreferences(getApplicationPreferences());
 	}
 
 	/**
@@ -175,12 +179,14 @@ public abstract class DesktopApplication implements IDesktopApplication,
 	 * <p>
 	 * This can be overridden in derived classes to add additional preferences
 	 * or to override the preferences themselves. Make sure to call
-	 * <code>super.installApplicationPreferences()</code> to ensure the default
-	 * preferences are kept.
+	 * <code>super.installApplicationPreferences(preferences)</code> to ensure
+	 * the default preferences are kept.
 	 * 
 	 * @see #saveApplicationPreferences()
+	 * @param preferences
+	 *            the application preferences node
 	 */
-	protected void installApplicationPreferences() {
+	protected void installApplicationPreferences(Preferences preferences) {
 	}
 
 	/**

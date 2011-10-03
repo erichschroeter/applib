@@ -13,9 +13,13 @@ public class ViewManagedEvent extends ViewEvent {
 	public static int REGISTERED = 0;
 	/** The action representing unregistration. */
 	public static int UNREGISTERED = 1;
+	/** The action representing the focused view changing. */
+	public static int FOCUSED = 2;
 
 	/** The action for which this event was initiated on. */
 	private int action;
+	/** The view identifier. */
+	private String identifier;
 
 	/**
 	 * 
@@ -26,9 +30,11 @@ public class ViewManagedEvent extends ViewEvent {
 	 * @param action
 	 *            the action for which this event was initiated on
 	 */
-	public ViewManagedEvent(Object source, View<?> view, int action) {
+	public ViewManagedEvent(Object source, View<?> view, String identifier,
+			int action) {
 		super(source, view);
 		this.action = action;
+		this.identifier = identifier;
 	}
 
 	/**
@@ -38,6 +44,15 @@ public class ViewManagedEvent extends ViewEvent {
 	 */
 	public int getAction() {
 		return action;
+	}
+
+	/**
+	 * Returns the view identifier the view manager identifies the view by.
+	 * 
+	 * @return the view identifier
+	 */
+	public String getIdentifier() {
+		return identifier;
 	}
 
 }

@@ -11,7 +11,6 @@ import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 
 import org.javamvc.GUIApplication;
-import org.javamvc.Lifecycle;
 import org.javamvc.MVCDesktopApplication;
 
 /**
@@ -36,6 +35,7 @@ public class SimpleGUIApplication extends MVCDesktopApplication {
 	 */
 	public SimpleGUIApplication() {
 		super(new JFrame());
+		setSavePreferencesOnExit(true);
 	}
 
 	@Override
@@ -66,7 +66,6 @@ public class SimpleGUIApplication extends MVCDesktopApplication {
 	@Override
 	protected void installModels() {
 		// do nothing since we're not using models for this simple example
-
 	}
 
 	@Override
@@ -82,26 +81,6 @@ public class SimpleGUIApplication extends MVCDesktopApplication {
 	@Override
 	public Preferences getApplicationPreferences() {
 		return getApplicationPreferences("simple-gui-application");
-	}
-
-	@Override
-	public void exit(int code) {
-		fireLifecycleChange(Lifecycle.STOPPING);
-		// save preferences
-		if (getApplicationWindow().getSize() != null) {
-			getApplicationPreferences().putInt("window.size.width",
-					getApplicationWindow().getSize().width);
-			getApplicationPreferences().putInt("window.size.height",
-					getApplicationWindow().getSize().height);
-		}
-		if (getApplicationWindow().getLocation() != null) {
-			getApplicationPreferences().putInt("window.location.x",
-					getApplicationWindow().getLocation().x);
-			getApplicationPreferences().putInt("window.location.y",
-					getApplicationWindow().getLocation().y);
-		}
-		fireLifecycleChange(Lifecycle.STOPPED);
-		System.exit(code);
 	}
 
 	@Override

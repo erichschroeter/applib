@@ -25,14 +25,10 @@ public abstract class MVCDesktopApplication extends GUIApplication {
 	protected ModelManager modelManager;
 	/** The object managing the application's views. */
 	protected ViewManager viewManager;
-	/** The map of views to models. */
+	/** The map of view identifiers to model identifiers. */
 	private Map<String, String> modelMap;
-	/** The map of view identifiers to models. */
-	private Map<String, Model<?>> modelIdMap;
-	/** The map of models to views. */
+	/** The map of model identifiers to view identifiers. */
 	private Map<String, String> viewMap;
-	/** The map of model identifiers to views. */
-	private Map<String, View<?>> viewIdMap;
 
 	/**
 	 * Constructs a default <code>MVCDesktopApplication</code>.
@@ -49,7 +45,12 @@ public abstract class MVCDesktopApplication extends GUIApplication {
 	 * Constructs a <code>MVCDesktopApplication</code> specifying the type of
 	 * <code>Container</code> to use for the main application window.
 	 * <p>
-	 * This is equivalent to <code>super(applicationWindow)</code>.
+	 * After initializing fields, the sequence of method calls is
+	 * <ol>
+	 * <li>{@link #installModels()}</li>
+	 * <li>{@link #installViews()}</li>
+	 * <li>{@link #mapViewsAndModels()}</li>
+	 * </ol>
 	 * 
 	 * @see GUIApplication#GUIApplication(Container)
 	 * @param applicationWindow
@@ -63,14 +64,8 @@ public abstract class MVCDesktopApplication extends GUIApplication {
 		setViewManager(new ViewManager());
 		installModels();
 		installViews();
+		mapViewsAndModels();
 	}
-
-	/**
-	 * Installs the views to be used by the application.
-	 * 
-	 * @see #register(String, View)
-	 */
-	protected abstract void installViews();
 
 	/**
 	 * Installs the models to be used by the application.
@@ -78,6 +73,13 @@ public abstract class MVCDesktopApplication extends GUIApplication {
 	 * @see #register(String, Model)
 	 */
 	protected abstract void installModels();
+
+	/**
+	 * Installs the views to be used by the application.
+	 * 
+	 * @see #register(String, View)
+	 */
+	protected abstract void installViews();
 
 	/**
 	 * Maps views and models together. This may be useful to let the framework
@@ -92,8 +94,8 @@ public abstract class MVCDesktopApplication extends GUIApplication {
 	 * <p>
 	 * This is provided publicly so classes can register to listen to manager
 	 * events. It is recommended to not use the mutator methods in the
-	 * <code>ModelManager</code> directly and instead use the methods provied by
-	 * {@link MVCDesktopApplication}.
+	 * <code>ModelManager</code> directly and instead use the methods provided
+	 * by {@link MVCDesktopApplication}.
 	 * 
 	 * @return the model manager
 	 */
@@ -116,7 +118,7 @@ public abstract class MVCDesktopApplication extends GUIApplication {
 	 * <p>
 	 * This is provided publicly so classes can register to listen to manager
 	 * events. It is recommended to not use the mutator methods in the
-	 * <code>ViewManager</code> directly and instead use the methods provied by
+	 * <code>ViewManager</code> directly and instead use the methods provided by
 	 * {@link MVCDesktopApplication}.
 	 * 
 	 * @return the view manager
@@ -149,28 +151,16 @@ public abstract class MVCDesktopApplication extends GUIApplication {
 	 *             <code>modelId</code> is not a registered model
 	 */
 	public void map(String modelId, String viewId) {
-		if (!viewIdMap.containsKey(viewId)) {
+		if (!viewManager.isRegistered(viewId)) {
 			throw new IllegalArgumentException(viewId
 					+ " not registered as a view");
 		}
-		if (!modelIdMap.containsKey(modelId)) {
+		if (!modelManager.isRegistered(modelId)) {
 			throw new IllegalArgumentException(modelId
 					+ " not registered as a model");
 		}
 		modelMap.put(viewId, modelId);
 		viewMap.put(modelId, viewId);
-	}
-
-	/**
-	 * Creates a mapping between the view identifier and the view.
-	 * 
-	 * @param viewId
-	 *            the view identifier to be mapped to <code>view</code>
-	 * @param view
-	 *            the view to be mapped to <code>viewId</code>
-	 */
-	public void register(String viewId, View<?> view) {
-		viewIdMap.put(viewId, view);
 	}
 
 	/**
@@ -182,7 +172,20 @@ public abstract class MVCDesktopApplication extends GUIApplication {
 	 *            the model to be mapped to <code>modelId</code>
 	 */
 	public void register(String modelId, Model<?> model) {
-		modelIdMap.put(modelId, model);
+		modelManager.registerView(modelId, model);
+	}
+
+	/**
+	 * Creates a mapping between the view identifier and the view.
+	 * 
+	 * @param viewId
+	 *            the view identifier to be mapped to <code>view</code>
+	 * @param view
+	 *            the view to be mapped to <code>viewId</code>
+	 */
+	public void register(String viewId, View<?> view) {
+		viewManager.registerView(viewId, view);
+
 	}
 
 	/**
@@ -193,7 +196,7 @@ public abstract class MVCDesktopApplication extends GUIApplication {
 	 * @return the model identified by <code>modelId</code>
 	 */
 	public Model<?> getModel(String modelId) {
-		return modelIdMap.get(modelId);
+		return modelManager.getModel(modelId);
 	}
 
 	/**
@@ -204,7 +207,51 @@ public abstract class MVCDesktopApplication extends GUIApplication {
 	 * @return the model identified by <code>viewId</code>
 	 */
 	public View<?> getView(String viewId) {
-		return viewIdMap.get(viewId);
+		return viewManager.getView(viewId);
+	}
+
+	/**
+	 * Returns the model mapped to the view identified by <code>viewId</code>.
+	 * 
+	 * @param viewId
+	 *            the view identifier mapped to the model
+	 * @return the model mapped to <code>viewId</code>
+	 * @throws NullPointerException
+	 *             if <code>viewId</code> is <code>null</code>
+	 * @throws IllegalArgumentException
+	 *             if <code>viewId</code> is not registered
+	 */
+	public Model<?> getModelMappedTo(String viewId) {
+		if (viewId == null) {
+			throw new NullPointerException("view identifier cannot be null");
+		}
+		if (!viewManager.isRegistered(viewId)) {
+			throw new IllegalArgumentException("\"" + viewId
+					+ "\" is not registered");
+		}
+		return modelManager.getModel(modelMap.get(viewId));
+	}
+
+	/**
+	 * Returns the view mapped to the model identified by <code>modelId</code>.
+	 * 
+	 * @param modelId
+	 *            the model identifier mapped to the view
+	 * @return the model mapped to <code>viewId</code>
+	 * @throws NullPointerException
+	 *             if <code>modelId</code> is <code>null</code>
+	 * @throws IllegalArgumentException
+	 *             if <code>modelId</code> is not registered
+	 */
+	public View<?> getViewMappedTo(String modelId) {
+		if (modelId == null) {
+			throw new NullPointerException("model identifier cannot be null");
+		}
+		if (!modelManager.isRegistered(modelId)) {
+			throw new IllegalArgumentException("\"" + modelId
+					+ "\" is not registered");
+		}
+		return viewManager.getView(viewMap.get(modelId));
 	}
 
 }
