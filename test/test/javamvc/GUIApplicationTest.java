@@ -16,11 +16,11 @@ import org.junit.Test;
 
 public class GUIApplicationTest {
 
-	private GUIApplication app;
+	private GUIApplication<JFrame> app;
 
 	@Before
 	public void setUp() throws Exception {
-		app = new GUIApplication() {
+		app = new GUIApplication<JFrame>(new JFrame()) {
 
 			@Override
 			public String getVersion() {
@@ -69,7 +69,7 @@ public class GUIApplicationTest {
 				.getClassLoader().getResource(
 						"test/resources/application-icon.png"));
 
-		app = new GUIApplication(new JFrame()) {
+		app = new GUIApplication<JFrame>(new JFrame()) {
 
 			@Override
 			public String getVersion() {

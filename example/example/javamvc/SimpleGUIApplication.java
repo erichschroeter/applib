@@ -21,7 +21,7 @@ import org.javamvc.MVCDesktopApplication;
  * 
  * @author Erich Schroeter
  */
-public class SimpleGUIApplication extends MVCDesktopApplication {
+public class SimpleGUIApplication extends MVCDesktopApplication<JFrame> {
 
 	/**
 	 * The application version. This should be incremented prior to each

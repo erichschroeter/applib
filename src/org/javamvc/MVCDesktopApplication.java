@@ -4,8 +4,6 @@ import java.awt.Container;
 import java.util.HashMap;
 import java.util.Map;
 
-import javax.swing.JFrame;
-
 import org.javamvc.model.Model;
 import org.javamvc.model.ModelManager;
 import org.javamvc.view.View;
@@ -19,7 +17,7 @@ import org.javamvc.view.ViewManager;
  * 
  * @author Erich Schroeter
  */
-public abstract class MVCDesktopApplication extends GUIApplication {
+public abstract class MVCDesktopApplication<C extends Container> extends GUIApplication<C> {
 
 	/** The object managing the application's models. */
 	protected ModelManager modelManager;
@@ -29,17 +27,6 @@ public abstract class MVCDesktopApplication extends GUIApplication {
 	private Map<String, String> modelMap;
 	/** The map of model identifiers to view identifiers. */
 	private Map<String, String> viewMap;
-
-	/**
-	 * Constructs a default <code>MVCDesktopApplication</code>.
-	 * <p>
-	 * This is equivalent to <code>MVCDesktopApplication(new JFrame())</code>.
-	 * 
-	 * @see #MVCDesktopApplication(Container)
-	 */
-	public MVCDesktopApplication() {
-		this(new JFrame());
-	}
 
 	/**
 	 * Constructs a <code>MVCDesktopApplication</code> specifying the type of
@@ -56,7 +43,7 @@ public abstract class MVCDesktopApplication extends GUIApplication {
 	 * @param applicationWindow
 	 *            the object to use as the main application window
 	 */
-	public MVCDesktopApplication(Container applicationWindow) {
+	public MVCDesktopApplication(C applicationWindow) {
 		super(applicationWindow); // initialize preferences and window
 		modelMap = new HashMap<String, String>();
 		viewMap = new HashMap<String, String>();

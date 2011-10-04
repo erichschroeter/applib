@@ -72,21 +72,12 @@ import org.javamvc.utils.Utils;
  * 
  * @author Erich Schroeter
  */
-public abstract class GUIApplication extends DesktopApplication {
+public abstract class GUIApplication<C extends Container> extends DesktopApplication {
 
 	/** The reference to the application window. */
-	protected Container applicationWindow;
+	protected C applicationWindow;
 	/** The application action map. */
 	protected ActionMap actionMap;
-
-	/**
-	 * Constructs a default <code>GUIApplication</code>.
-	 * <p>
-	 * This is equivalent to <code>GUIApplication(new JFrame())</code>.
-	 */
-	public GUIApplication() {
-		this(new JFrame());
-	}
 
 	/**
 	 * Constructs a <code>GUIApplication</code> specifying the type of
@@ -102,7 +93,7 @@ public abstract class GUIApplication extends DesktopApplication {
 	 * @param applicationWindow
 	 *            the object to use as the main application window
 	 */
-	public GUIApplication(Container applicationWindow) {
+	public GUIApplication(C applicationWindow) {
 		super(); // initialize preferences
 		setActionMap(new ActionMap());
 		setApplicationWindow(applicationWindow);
@@ -270,7 +261,7 @@ public abstract class GUIApplication extends DesktopApplication {
 	 * 
 	 * @return the application window
 	 */
-	public Container getApplicationWindow() {
+	public C getApplicationWindow() {
 		return applicationWindow;
 	}
 
@@ -280,7 +271,7 @@ public abstract class GUIApplication extends DesktopApplication {
 	 * @param applicationWindow
 	 *            the main application window
 	 */
-	protected void setApplicationWindow(Container applicationWindow) {
+	protected void setApplicationWindow(C applicationWindow) {
 		this.applicationWindow = applicationWindow;
 	}
 

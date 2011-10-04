@@ -24,6 +24,20 @@ import org.javamvc.utils.SwingLink;
 /**
  * The <code>AboutDialog</code> provides methods for setting the basic
  * information an about dialog should contain.
+ * <p>
+ * The information available to customize in the about dialog is below
+ * <ul>
+ * <li>{@link #setLogo(Icon)}</li>
+ * <li>{@link #setVersion(String)}</li>
+ * <li>{@link #setApplicationName(String)}</li>
+ * <li>{@link #setApplicationOwner(String)}</li>
+ * <li>{@link #setWebsite(String)}</li>
+ * <li>{@link #setCopyright(String)}</li>
+ * <li>{@link #setDescription(String)}</li>
+ * <li>{@link #setFeatures(String[])}</li>
+ * <li>{@link #setAuthors(String[])}</li>
+ * <li>{@link #setLicenses(String[])}</li>
+ * </ul>
  * 
  * @author Erich Schroeter
  */
@@ -181,6 +195,7 @@ public class AboutDialog extends JDialog {
 				.addComponent(websiteComponent).addComponent(descriptionLabel)
 				.addComponent(tabs).addComponent(closeButton));
 		pack();
+		setLocationRelativeTo(getParent());
 	}
 
 	public Icon getLogo() {
