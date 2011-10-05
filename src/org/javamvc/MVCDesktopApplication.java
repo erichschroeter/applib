@@ -17,7 +17,8 @@ import org.javamvc.view.ViewManager;
  * 
  * @author Erich Schroeter
  */
-public abstract class MVCDesktopApplication<C extends Container> extends GUIApplication<C> {
+public abstract class MVCDesktopApplication<C extends Container> extends
+		GUIApplication<C> {
 
 	/** The object managing the application's models. */
 	protected ModelManager modelManager;
@@ -42,9 +43,11 @@ public abstract class MVCDesktopApplication<C extends Container> extends GUIAppl
 	 * @see GUIApplication#GUIApplication(Container)
 	 * @param applicationWindow
 	 *            the object to use as the main application window
+	 * @param objects
+	 *            objects that need initialization
 	 */
-	public MVCDesktopApplication(C applicationWindow) {
-		super(applicationWindow); // initialize preferences and window
+	public MVCDesktopApplication(C applicationWindow, Object... objects) {
+		super(applicationWindow, objects); // initialize preferences and window
 		modelMap = new HashMap<String, String>();
 		viewMap = new HashMap<String, String>();
 		setModelManager(new ModelManager());

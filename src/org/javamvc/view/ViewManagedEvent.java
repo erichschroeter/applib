@@ -10,11 +10,11 @@ package org.javamvc.view;
 public class ViewManagedEvent extends ViewEvent {
 
 	/** The action representing registration. */
-	public static int REGISTERED = 0;
+	public static final int REGISTERED = 0;
 	/** The action representing unregistration. */
-	public static int UNREGISTERED = 1;
+	public static final int UNREGISTERED = 1;
 	/** The action representing the focused view changing. */
-	public static int FOCUSED = 2;
+	public static final int FOCUSED = 2;
 
 	/** The action for which this event was initiated on. */
 	private int action;

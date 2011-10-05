@@ -10,9 +10,9 @@ package org.javamvc.model;
 public class ModelManagedEvent extends ModelEvent {
 
 	/** The action representing registration. */
-	public static int REGISTERED = 0;
+	public static final int REGISTERED = 0;
 	/** The action representing unregistration. */
-	public static int UNREGISTERED = 1;
+	public static final int UNREGISTERED = 1;
 
 	/** The action for which this event was initiated on. */
 	private int action;

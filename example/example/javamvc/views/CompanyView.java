@@ -8,15 +8,15 @@ import javax.swing.JTextField;
 import javax.swing.GroupLayout.Alignment;
 
 import org.javamvc.GUIApplication;
-import org.javamvc.view.View;
+import org.javamvc.view.ViewImpl;
 
 /**
  * A <code>CompanyView</code> is a simple example to show users how to use a
- * {@link View}. It displays components for a user to enter company information.
+ * {@link ViewImpl}. It displays components for a user to enter company information.
  * 
  * @author Erich Schroeter
  */
-public class CompanyView extends View<JPanel> {
+public class CompanyView extends ViewImpl<JPanel> {
 
 	public CompanyView(GUIApplication app) {
 		super(app, new JPanel());

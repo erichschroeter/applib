@@ -65,10 +65,28 @@ public abstract class DesktopApplication implements IDesktopApplication,
 	 * 
 	 * @see #getApplicationPreferences()
 	 * @see #installApplicationPreferences(Preferences)
+	 * @param objects
+	 *            objects that need initialization
 	 */
-	public DesktopApplication() {
+	public DesktopApplication(Object... objects) {
 		properties = new PropertyChangeSupport(this);
+		initializeApplication(objects);
 		installApplicationPreferences(getApplicationPreferences());
+	}
+
+	/**
+	 * Initializes the desktop application.
+	 * <p>
+	 * This method is the first method called when an application is
+	 * instantiated. Any objects that need initialization in a derived
+	 * constructor should be initialized in this method, which is guaranteed to
+	 * be called before returning to the derived class's constructor (assuming
+	 * that the <code>DesktopApplication</code> constructor is called).
+	 * 
+	 * @param objects
+	 *            objects that need initialization
+	 */
+	protected void initializeApplication(Object... objects) {
 	}
 
 	/**

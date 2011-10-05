@@ -72,7 +72,8 @@ import org.javamvc.utils.Utils;
  * 
  * @author Erich Schroeter
  */
-public abstract class GUIApplication<C extends Container> extends DesktopApplication {
+public abstract class GUIApplication<C extends Container> extends
+		DesktopApplication {
 
 	/** The reference to the application window. */
 	protected C applicationWindow;
@@ -92,9 +93,11 @@ public abstract class GUIApplication<C extends Container> extends DesktopApplica
 	 * @see #getApplicationWindow()
 	 * @param applicationWindow
 	 *            the object to use as the main application window
+	 * @param objects
+	 *            objects that need initialization
 	 */
-	public GUIApplication(C applicationWindow) {
-		super(); // initialize preferences
+	public GUIApplication(C applicationWindow, Object... objects) {
+		super(objects); // initialize preferences
 		setActionMap(new ActionMap());
 		setApplicationWindow(applicationWindow);
 		initializeWindow(applicationWindow);
