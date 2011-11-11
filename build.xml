@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 
-<project basedir="." default="help" name="javamvc">
+<project basedir="." default="help" name="applib">
 
 	<!-- The location to output JUnit tests -->
 	<property name="junit.location" value="junit" />
@@ -22,7 +22,7 @@
 		<pathelement
 			location="${ECLIPSE_HOME}/plugins/org.hamcrest.core_1.1.0.v20090501071000.jar" />
 	</path>
-	<path id="javamvc.classpath">
+	<path id="applib.classpath">
 		<pathelement location="${build.location}" />
 		<path refid="JUnit 4.libraryclasspath" />
 	</path>
@@ -62,17 +62,17 @@
 		<javac debug="true" debuglevel="${debuglevel}" destdir="${build.location}"
 			source="${source}" target="${target}">
 			<src path="src" />
-			<classpath refid="javamvc.classpath" />
+			<classpath refid="applib.classpath" />
 		</javac>
 		<javac debug="true" debuglevel="${debuglevel}" destdir="${build.location}"
 			source="${source}" target="${target}">
 			<src path="test" />
-			<classpath refid="javamvc.classpath" />
+			<classpath refid="applib.classpath" />
 		</javac>
 		<javac debug="true" debuglevel="${debuglevel}" destdir="${build.location}"
 			source="${source}" target="${target}">
 			<src path="example" />
-			<classpath refid="javamvc.classpath" />
+			<classpath refid="applib.classpath" />
 		</javac>
 	</target>
 
@@ -81,7 +81,7 @@
 		<junit fork="yes" printsummary="withOutAndErr">
 			<formatter type="xml" />
 			<test name="test.javamvc.GUIApplicationTest" todir="${junit.location}" />
-			<classpath refid="javamvc.classpath" />
+			<classpath refid="applib.classpath" />
 		</junit>
 	</target>
 
@@ -103,7 +103,7 @@
 		<!--ANT 1.7 is required -->
 		<jar destfile="${jar.location}/${ant.project.name}.jar"
 			filesetmanifest="mergewithoutmain">
-			<!-- javamvc -->
+			<!-- applib -->
 			<fileset dir="${build.location}">
 				<exclude name="test/**" />
 				<exclude name="example/**" />
@@ -114,7 +114,7 @@
 	<!-- Generates the Javadoc for the main project. -->
 	<target name="javadoc" description="generates Javadoc documentation">
 		<mkdir dir="${javadoc.location}" />
-		<javadoc packagenames="org.javamvc.*" sourcepath="src"
+		<javadoc packagenames="usr.erichschroeter.applib.*" sourcepath="src"
 			author="true" destdir="${javadoc.location}">
 			<doctitle><![CDATA[<h1>Java MVC</h1>]]></doctitle>
 			<bottom><![CDATA[<i>&#169; 2010 Erich Schroeter. All rights reserved</i>]]></bottom>

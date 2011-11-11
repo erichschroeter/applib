@@ -3,8 +3,6 @@ package usr.erichschroeter.applib;
 import java.util.HashMap;
 import java.util.Map;
 
-
-
 import usr.erichschroeter.applib.model.Model;
 import usr.erichschroeter.applib.model.ModelManager;
 import usr.erichschroeter.applib.view.View;
@@ -17,7 +15,7 @@ import usr.erichschroeter.applib.view.ViewManager;
  * 
  * @author Erich Schroeter
  */
-public abstract class Controller {
+public class Controller {
 
 	/** The object managing the application's models. */
 	protected ModelManager modelManager;
@@ -29,7 +27,18 @@ public abstract class Controller {
 	private Map<String, String> viewMap;
 
 	/**
-	 * Constructs a default <code>Controller</code> initializing default fields.
+	 * Constructs a default <code>Controller</code>.
+	 * <p>
+	 * This is equivalent to
+	 * <code>new Controller(new ModelManager(), new ViewManager())</code>.
+	 */
+	public Controller() {
+		this(new ModelManager(), new ViewManager());
+	}
+
+	/**
+	 * Constructs a <code>Controller</code> specifying the model and view
+	 * managers.
 	 * <p>
 	 * After initializing fields, the sequence of method calls is
 	 * <ol>
@@ -37,39 +46,17 @@ public abstract class Controller {
 	 * <li>{@link #installViews()}</li>
 	 * <li>{@link #mapViewsAndModels()}</li>
 	 * </ol>
+	 * 
+	 * @param modelManager
+	 *            the model manager
+	 * @param viewManager
+	 *            the view manager
 	 */
-	public Controller() {
+	public Controller(ModelManager modelManager, ViewManager viewManager) {
 		modelMap = new HashMap<String, String>();
 		viewMap = new HashMap<String, String>();
-		setModelManager(new ModelManager());
-		setViewManager(new ViewManager());
-		installModels();
-		installViews();
-		mapViewsAndModels();
-	}
-
-	/**
-	 * Installs the models to be used by the application.
-	 * 
-	 * @see #register(String, Model)
-	 */
-	protected abstract void installModels();
-
-	/**
-	 * Installs the views to be used by the application.
-	 * 
-	 * @see #register(String, View)
-	 */
-	protected abstract void installViews();
-
-	/**
-	 * Maps views and models together. This may be useful to let the framework
-	 * automatically retrieve a view for a specific model.
-	 * 
-	 * @see #map(String, String)
-	 */
-	protected void mapViewsAndModels() {
-		// no mappings by default
+		setModelManager(modelManager);
+		setViewManager(viewManager);
 	}
 
 	/**
@@ -155,7 +142,7 @@ public abstract class Controller {
 	 *            the model to be mapped to <code>modelId</code>
 	 */
 	public void register(String modelId, Model<?> model) {
-		modelManager.registerView(modelId, model);
+		modelManager.registerModel(modelId, model);
 	}
 
 	/**

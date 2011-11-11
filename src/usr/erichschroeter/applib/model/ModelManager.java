@@ -106,7 +106,7 @@ public class ModelManager {
 	 * @param model
 	 *            the model being mapped to <code>key</code>
 	 */
-	public void registerView(String key, Model<?> model) {
+	public void registerModel(String key, Model<?> model) {
 		if (!isRegistered(key)) {
 			// key not being used, so simply add to the map
 			models.put(key, model);
@@ -116,7 +116,7 @@ public class ModelManager {
 			// key being used by another model, so we have to unregister it if
 			// we are going to use the same key
 			if (isAutoUnregister()) {
-				unregisterView(key);
+				unregisterModel(key);
 				models.put(key, model);
 				fireModelManagedEvent(new ModelManagedEvent(this, model,
 						ModelManagedEvent.REGISTERED));
@@ -133,7 +133,7 @@ public class ModelManager {
 	 * @param key
 	 *            the key currently mapped to a model
 	 */
-	public void unregisterView(String key) {
+	public void unregisterModel(String key) {
 		if (isRegistered(key)) {
 			Model<?> model = models.remove(key);
 			fireModelManagedEvent(new ModelManagedEvent(this, model,
