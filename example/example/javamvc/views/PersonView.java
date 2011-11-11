@@ -20,7 +20,7 @@ import org.javamvc.view.ViewImpl;
  */
 public class PersonView extends ViewImpl<JPanel> {
 
-	public PersonView(GUIApplication app) {
+	public PersonView(GUIApplication<?> app) {
 		super(app, new JPanel());
 	}
 

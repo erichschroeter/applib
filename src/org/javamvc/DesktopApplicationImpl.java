@@ -35,8 +35,7 @@ import javax.swing.Icon;
  * 
  * @author Erich Schroeter
  */
-public abstract class DesktopApplicationImpl implements DesktopApplication,
-		IPropertyChangeNotifier, ILifecycleNotifier {
+public abstract class DesktopApplicationImpl implements DesktopApplication {
 
 	/** Used for managing property listeners. */
 	protected PropertyChangeSupport properties;
@@ -418,7 +417,6 @@ public abstract class DesktopApplicationImpl implements DesktopApplication,
 	// ILifecycleNotifier members
 	//
 
-	@Override
 	public void addLifecycleListener(LifecycleListener listener) {
 		// don't instantiate until it's needed
 		lifecycleListeners = lifecycleListeners != null ? lifecycleListeners
@@ -426,7 +424,6 @@ public abstract class DesktopApplicationImpl implements DesktopApplication,
 		lifecycleListeners.add(listener);
 	}
 
-	@Override
 	public void addLifecycleListener(Lifecycle lifecycle,
 			LifecycleListener listener) {
 		// don't instantiate anything until it's needed
@@ -440,14 +437,12 @@ public abstract class DesktopApplicationImpl implements DesktopApplication,
 		specificLifecycleListeners.get(lifecycle).add(listener);
 	}
 
-	@Override
 	public void removeLifecycleListener(LifecycleListener listener) {
 		if (lifecycleListeners != null && listener != null) {
 			lifecycleListeners.remove(listener);
 		}
 	}
 
-	@Override
 	public void removeLifecycleListener(Lifecycle lifecycle,
 			LifecycleListener listener) {
 		if (specificLifecycleListeners != null && listener != null
@@ -456,12 +451,10 @@ public abstract class DesktopApplicationImpl implements DesktopApplication,
 		}
 	}
 
-	@Override
 	public List<LifecycleListener> getLifecycleListeners() {
 		return lifecycleListeners;
 	}
 
-	@Override
 	public List<LifecycleListener> getLifecycleListeners(Lifecycle lifecycle) {
 		return specificLifecycleListeners.get(lifecycle);
 	}

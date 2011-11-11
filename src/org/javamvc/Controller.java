@@ -1,7 +1,5 @@
 package org.javamvc;
 
-import java.awt.Container;
-import java.awt.Window;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -11,15 +9,13 @@ import org.javamvc.view.View;
 import org.javamvc.view.ViewManager;
 
 /**
- * A <code>MVCDesktopApplication</code> is a {@link GUIApplication} which
- * implements the <em>Model-View-Controller (MVC)</em> framework. This class
- * serves as the <em>Controller</em> and provides methods for managing views and
- * models.
+ * A <code>Controller</code> is, as the name would suggest, the Controller in
+ * the <em>Model-View-Controller (MVC)</em> framework. This provides methods for
+ * managing views and models.
  * 
  * @author Erich Schroeter
  */
-public abstract class Controller<W extends Window> extends
-		GUIApplication<W> {
+public abstract class Controller {
 
 	/** The object managing the application's models. */
 	protected ModelManager modelManager;
@@ -31,8 +27,7 @@ public abstract class Controller<W extends Window> extends
 	private Map<String, String> viewMap;
 
 	/**
-	 * Constructs a <code>MVCDesktopApplication</code> specifying the type of
-	 * <code>Container</code> to use for the main application window.
+	 * Constructs a default <code>Controller</code> initializing default fields.
 	 * <p>
 	 * After initializing fields, the sequence of method calls is
 	 * <ol>
@@ -40,15 +35,8 @@ public abstract class Controller<W extends Window> extends
 	 * <li>{@link #installViews()}</li>
 	 * <li>{@link #mapViewsAndModels()}</li>
 	 * </ol>
-	 * 
-	 * @see GUIApplication#GUIApplication(Container)
-	 * @param applicationWindow
-	 *            the object to use as the main application window
-	 * @param objects
-	 *            objects that need initialization
 	 */
-	public Controller(W applicationWindow, Object... objects) {
-		super(applicationWindow, objects); // initialize preferences and window
+	public Controller() {
 		modelMap = new HashMap<String, String>();
 		viewMap = new HashMap<String, String>();
 		setModelManager(new ModelManager());
@@ -78,7 +66,9 @@ public abstract class Controller<W extends Window> extends
 	 * 
 	 * @see #map(String, String)
 	 */
-	protected abstract void mapViewsAndModels();
+	protected void mapViewsAndModels() {
+		// no mappings by default
+	}
 
 	/**
 	 * Returns the object managing the application's models.

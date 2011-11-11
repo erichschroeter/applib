@@ -10,7 +10,6 @@ import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 
 import org.javamvc.GUIApplication;
-import org.javamvc.Controller;
 
 /**
  * This is an example of how an end user would use the <b>javamvc</b> library in
@@ -20,7 +19,7 @@ import org.javamvc.Controller;
  * 
  * @author Erich Schroeter
  */
-public class SimpleGUIApplication extends Controller<JFrame> {
+public class SimpleGUIApplication extends GUIApplication<JFrame> {
 
 	/**
 	 * The application version. This should be incremented prior to each
@@ -59,22 +58,6 @@ public class SimpleGUIApplication extends Controller<JFrame> {
 				.getClassLoader().getResource(
 						"example/resources/application-icon.png")));
 		applicationWindow.pack();
-	}
-
-	@Override
-	protected void installModels() {
-		// do nothing since we're not using models for this simple example
-	}
-
-	@Override
-	protected void installViews() {
-		// do nothing since we're not using views for this simple example
-	}
-
-	@Override
-	protected void mapViewsAndModels() {
-		// do nothing since we're not using views or models for this simple
-		// example
 	}
 
 	@Override

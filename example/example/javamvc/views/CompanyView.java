@@ -18,7 +18,7 @@ import org.javamvc.view.ViewImpl;
  */
 public class CompanyView extends ViewImpl<JPanel> {
 
-	public CompanyView(GUIApplication app) {
+	public CompanyView(GUIApplication<?> app) {
 		super(app, new JPanel());
 	}
 
