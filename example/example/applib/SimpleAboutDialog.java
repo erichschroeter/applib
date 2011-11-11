@@ -1,4 +1,4 @@
-package example.javamvc;
+package example.applib;
 
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;

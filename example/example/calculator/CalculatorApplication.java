@@ -2,6 +2,12 @@ package example.calculator;
 
 import usr.erichschroeter.applib.DesktopApplicationImpl;
 
+/**
+ * The <code>CalculatorApplication</code> handles performing a
+ * {@link MathOperation} and printing the result to standard output.
+ * 
+ * @author Erich Schroeter
+ */
 public class CalculatorApplication extends DesktopApplicationImpl {
 
 	/** The math operation the calculator is to perform. */
