@@ -1,10 +1,10 @@
-package org.javamvc.view;
+package usr.erichschroeter.applib.view;
 
 import java.awt.Component;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.javamvc.GUIApplication;
+import usr.erichschroeter.applib.GUIApplication;
 
 /**
  * A <code>ViewImpl</code> is a default implementation of the {@link View}

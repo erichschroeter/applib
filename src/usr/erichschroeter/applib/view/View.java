@@ -1,8 +1,8 @@
-package org.javamvc.view;
+package usr.erichschroeter.applib.view;
 
 import java.awt.Component;
 
-import org.javamvc.GUIApplication;
+import usr.erichschroeter.applib.GUIApplication;
 
 /**
  * The <code>View</code> interface provides methods required for a view. A view

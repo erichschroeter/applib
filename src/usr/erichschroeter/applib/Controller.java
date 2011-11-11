@@ -1,12 +1,14 @@
-package org.javamvc;
+package usr.erichschroeter.applib;
 
 import java.util.HashMap;
 import java.util.Map;
 
-import org.javamvc.model.Model;
-import org.javamvc.model.ModelManager;
-import org.javamvc.view.View;
-import org.javamvc.view.ViewManager;
+
+
+import usr.erichschroeter.applib.model.Model;
+import usr.erichschroeter.applib.model.ModelManager;
+import usr.erichschroeter.applib.view.View;
+import usr.erichschroeter.applib.view.ViewManager;
 
 /**
  * A <code>Controller</code> is, as the name would suggest, the Controller in

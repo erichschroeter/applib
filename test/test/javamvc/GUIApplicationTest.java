@@ -9,10 +9,11 @@ import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 
-import org.javamvc.DesktopApplicationImpl;
-import org.javamvc.GUIApplication;
 import org.junit.Before;
 import org.junit.Test;
+
+import usr.erichschroeter.applib.DesktopApplicationImpl;
+import usr.erichschroeter.applib.GUIApplication;
 
 public class GUIApplicationTest {
 

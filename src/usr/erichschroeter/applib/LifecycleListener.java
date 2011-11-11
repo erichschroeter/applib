@@ -1,4 +1,4 @@
-package org.javamvc;
+package usr.erichschroeter.applib;
 
 /**
  * The <code>LifecycleListener</code> interface provides methods for updating an

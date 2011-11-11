@@ -1,4 +1,4 @@
-package org.javamvc.model;
+package usr.erichschroeter.applib.model;
 
 /**
  * A <code>Model</code> wraps a model object. This class simply provides an

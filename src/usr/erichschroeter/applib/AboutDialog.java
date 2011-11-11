@@ -1,4 +1,4 @@
-package org.javamvc;
+package usr.erichschroeter.applib;
 
 import java.awt.Component;
 import java.awt.Frame;
@@ -19,7 +19,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
 import javax.swing.border.BevelBorder;
 
-import org.javamvc.utils.SwingLink;
+import usr.erichschroeter.applib.utils.SwingLink;
 
 /**
  * The <code>AboutDialog</code> provides methods for setting the basic

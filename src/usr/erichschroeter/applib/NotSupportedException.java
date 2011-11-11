@@ -1,4 +1,4 @@
-package org.javamvc;
+package usr.erichschroeter.applib;
 
 /**
  * A <code>NotSupportedException</code> should be used in exceptional cases

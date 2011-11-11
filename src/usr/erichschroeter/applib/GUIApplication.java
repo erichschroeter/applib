@@ -1,4 +1,4 @@
-package org.javamvc;
+package usr.erichschroeter.applib;
 
 import java.awt.Dimension;
 import java.awt.Frame;
@@ -12,7 +12,7 @@ import javax.swing.ActionMap;
 import javax.swing.Icon;
 import javax.swing.JFrame;
 
-import org.javamvc.utils.Utils;
+import usr.erichschroeter.applib.utils.Utils;
 
 /**
  * A <code>GUIApplication</code> is a desktop application which provides methods

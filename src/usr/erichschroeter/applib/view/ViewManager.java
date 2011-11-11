@@ -1,4 +1,4 @@
-package org.javamvc.view;
+package usr.erichschroeter.applib.view;
 
 import java.util.HashMap;
 import java.util.List;

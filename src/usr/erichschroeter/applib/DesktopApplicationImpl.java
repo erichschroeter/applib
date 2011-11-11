@@ -1,4 +1,4 @@
-package org.javamvc;
+package usr.erichschroeter.applib;
 
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;

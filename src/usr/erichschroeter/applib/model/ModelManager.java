@@ -1,4 +1,4 @@
-package org.javamvc.model;
+package usr.erichschroeter.applib.model;
 
 import java.util.HashMap;
 import java.util.List;

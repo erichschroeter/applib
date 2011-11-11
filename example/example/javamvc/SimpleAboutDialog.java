@@ -8,7 +8,7 @@ import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 
-import org.javamvc.AboutDialog;
+import usr.erichschroeter.applib.AboutDialog;
 
 /**
  * This example shows the simple usage of the {@link AboutDialog}.

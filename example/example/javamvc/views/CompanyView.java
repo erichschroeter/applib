@@ -7,8 +7,10 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.GroupLayout.Alignment;
 
-import org.javamvc.GUIApplication;
-import org.javamvc.view.ViewImpl;
+
+
+import usr.erichschroeter.applib.GUIApplication;
+import usr.erichschroeter.applib.view.ViewImpl;
 
 /**
  * A <code>CompanyView</code> is a simple example to show users how to use a

@@ -1,4 +1,4 @@
-package org.javamvc.view;
+package usr.erichschroeter.applib.view;
 
 /**
  * A <code>ViewManagedEvent</code> gets fired when a view has been managed by

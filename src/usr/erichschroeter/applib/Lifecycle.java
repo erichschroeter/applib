@@ -1,4 +1,4 @@
-package org.javamvc;
+package usr.erichschroeter.applib;
 
 /**
  * The <code>Lifecycle enum</code> provides the possible lifecycle events that

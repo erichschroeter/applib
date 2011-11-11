@@ -1,4 +1,4 @@
-package org.javamvc.model;
+package usr.erichschroeter.applib.model;
 
 /**
  * A <code>ModelRegistrationEvent</code> gets delivered when a model has been

@@ -1,4 +1,4 @@
-package org.javamvc.view;
+package usr.erichschroeter.applib.view;
 
 /**
  * The <code>ViewManagerListener</code> interface provides methods for listeners

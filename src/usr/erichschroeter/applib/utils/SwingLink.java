@@ -1,4 +1,4 @@
-package org.javamvc.utils;
+package usr.erichschroeter.applib.utils;
 
 import java.awt.Desktop;
 import java.awt.event.MouseAdapter;

@@ -6,7 +6,7 @@ import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 
-import org.javamvc.GUIApplication;
+import usr.erichschroeter.applib.GUIApplication;
 
 /**
  * This is an example of how an end user would use the <b>javamvc</b> library in

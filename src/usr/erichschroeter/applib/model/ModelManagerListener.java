@@ -1,4 +1,4 @@
-package org.javamvc.model;
+package usr.erichschroeter.applib.model;
 
 /**
  * The <code>ModelManagerListener</code> interface provides methods for
