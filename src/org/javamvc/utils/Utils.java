@@ -10,6 +10,7 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.net.URI;
 
+import javax.imageio.ImageIO;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 
@@ -20,6 +21,24 @@ import javax.swing.ImageIcon;
  * @author Erich Schroeter
  */
 public class Utils {
+
+	/**
+	 * Returns the <code>resource</code> as an <code>ImageIcon</code>.
+	 * 
+	 * @param resource
+	 *            the icon resource
+	 * @return the <code>resource</code> as an <code>ImageIcon</code>
+	 */
+	public static ImageIcon imageIcon(String resource) {
+		ImageIcon icon = null;
+		try {
+			icon = new ImageIcon(ImageIO.read(Utils.class.getClassLoader()
+					.getResourceAsStream(resource)));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return icon;
+	}
 
 	/**
 	 * Converts the specified <code>Icon</code> to an <code>Image</code>.

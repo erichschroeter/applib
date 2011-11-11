@@ -1,6 +1,7 @@
 package org.javamvc;
 
 import java.awt.Container;
+import java.awt.Window;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -17,8 +18,8 @@ import org.javamvc.view.ViewManager;
  * 
  * @author Erich Schroeter
  */
-public abstract class MVCDesktopApplication<C extends Container> extends
-		GUIApplication<C> {
+public abstract class MVCDesktopApplication<W extends Window> extends
+		GUIApplication<W> {
 
 	/** The object managing the application's models. */
 	protected ModelManager modelManager;
@@ -46,7 +47,7 @@ public abstract class MVCDesktopApplication<C extends Container> extends
 	 * @param objects
 	 *            objects that need initialization
 	 */
-	public MVCDesktopApplication(C applicationWindow, Object... objects) {
+	public MVCDesktopApplication(W applicationWindow, Object... objects) {
 		super(applicationWindow, objects); // initialize preferences and window
 		modelMap = new HashMap<String, String>();
 		viewMap = new HashMap<String, String>();

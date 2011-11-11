@@ -65,8 +65,10 @@ public abstract class DesktopApplication implements IDesktopApplication,
 	 * 
 	 * @see #getApplicationPreferences()
 	 * @see #installApplicationPreferences(Preferences)
+	 * @see #initializeApplication(Object...)
 	 * @param objects
-	 *            objects that need initialization
+	 *            objects that need initialization in
+	 *            <code>initializeApplication(Object...)</code>
 	 */
 	public DesktopApplication(Object... objects) {
 		properties = new PropertyChangeSupport(this);
@@ -90,15 +92,46 @@ public abstract class DesktopApplication implements IDesktopApplication,
 	}
 
 	/**
+	 * Starts the application with no arguments.
+	 * <p>
+	 * This is equivalent to <code>run((Object[]) null)</code>.
+	 * 
+	 * @see #run(Object...)
+	 */
+	public void run() {
+		run((Object[]) null);
+	}
+
+	/**
+	 * Starts the application with the specified <code>args</code>. This method
+	 * should handle things such as
+	 * <ul>
+	 * <li>processing the <code>args</code></li>
+	 * <li>invoking application life cycle events</li>
+	 * <li>showing the application GUI</li>
+	 * </ul>
+	 * <p>
+	 * This is equivalent to <code>run((Object[]) args)</code>.
+	 * 
+	 * @see #run(Object...)
+	 * @param args
+	 *            arguments from the command line
+	 */
+	public void run(String... args) {
+		run((Object[]) args);
+	}
+
+	/**
 	 * Exits the application specifying the error code of 0 to indicate that
 	 * everything is ok. This will automatically save the application
 	 * preferences if the feature is enabled.
+	 * <p>
+	 * This is equivalent to <code>exit(0)</code>.
 	 * 
 	 * @see #exit(int)
 	 * @see #isSavePreferencesOnExit()
 	 * @see #setSavePreferencesOnExit(boolean)
 	 */
-	@Override
 	public void exit() {
 		exit(0);
 	}

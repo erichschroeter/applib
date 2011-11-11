@@ -1,8 +1,8 @@
 package org.javamvc.view;
 
 /**
- * A <code>ViewRegistrationEvent</code> gets delivered when a view has been
- * managed by the {@link ViewManager}.
+ * A <code>ViewManagedEvent</code> gets fired when a view has been managed by
+ * the {@link ViewManager}.
  * 
  * @author Erich Schroeter
  */

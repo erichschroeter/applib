@@ -13,7 +13,7 @@ import javax.swing.Icon;
  * 
  * @author Erich Schroeter
  */
-public interface IDesktopApplication {
+public interface IDesktopApplication extends Runnable {
 
 	/**
 	 * Returns the version of the application. This may follow whatever
@@ -35,14 +35,6 @@ public interface IDesktopApplication {
 	public String getVersion();
 
 	/**
-	 * Starts the application. A default implementation could be equivalent to
-	 * <code>run(null)</code>.
-	 * 
-	 * @see #run(String[])
-	 */
-	public void run();
-
-	/**
 	 * Starts the application with the specified <code>args</code>. This method
 	 * should handle things such as
 	 * <ul>
@@ -52,15 +44,9 @@ public interface IDesktopApplication {
 	 * </ul>
 	 * 
 	 * @param args
-	 *            arguments from the command line
+	 *            arguments parsed from the command line
 	 */
-	public void run(String[] args);
-
-	/**
-	 * Exits the application. A default implementation could be equivalent to
-	 * <code>exit(0)</code>.
-	 */
-	public void exit();
+	public void run(Object... args);
 
 	/**
 	 * Exits the application specifying the error code to print to the console.

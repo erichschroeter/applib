@@ -1,6 +1,5 @@
 package org.javamvc;
 
-import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.Frame;
 import java.awt.Point;
@@ -72,19 +71,19 @@ import org.javamvc.utils.Utils;
  * 
  * @author Erich Schroeter
  */
-public abstract class GUIApplication<C extends Container> extends
+public abstract class GUIApplication<W extends Window> extends
 		DesktopApplication {
 
 	/** The reference to the application window. */
-	protected C applicationWindow;
+	protected W applicationWindow;
 	/** The application action map. */
 	protected ActionMap actionMap;
 
 	/**
 	 * Constructs a <code>GUIApplication</code> specifying the type of
-	 * <code>Container</code> to use for the main application window. This
+	 * <code>Window</code> to use for the main application window. This
 	 * initializes the application window by calling
-	 * {@link #initializeWindow(Container)} and initializes the application
+	 * {@link #initializeWindow(Window)} and initializes the application
 	 * preferences by calling {@link #installApplicationPreferences()}.
 	 * <p>
 	 * The <code>applicationWindow</code> is what will be returned by the
@@ -96,9 +95,10 @@ public abstract class GUIApplication<C extends Container> extends
 	 * @param objects
 	 *            objects that need initialization
 	 */
-	public GUIApplication(C applicationWindow, Object... objects) {
+	public GUIApplication(W applicationWindow, Object... objects) {
 		super(objects); // initialize preferences
 		setActionMap(new ActionMap());
+		installActions(getActionMap());
 		setApplicationWindow(applicationWindow);
 		initializeWindow(applicationWindow);
 	}
@@ -127,7 +127,7 @@ public abstract class GUIApplication<C extends Container> extends
 	 * @param applicationWindow
 	 *            the application window to initialize
 	 */
-	protected void initializeWindow(Container applicationWindow) {
+	protected void initializeWindow(W applicationWindow) {
 		applicationWindow.setPreferredSize(new Dimension(
 				getApplicationPreferences().getInt("window.size.width", 100),
 				getApplicationPreferences().getInt("window.size.height", 100)));
@@ -257,14 +257,14 @@ public abstract class GUIApplication<C extends Container> extends
 	/**
 	 * Returns the main application window.
 	 * <p>
-	 * The application window is returned as a <code>Container</code> object in
+	 * The application window is returned as a <code>Window</code> object in
 	 * order to give users the flexibility of using the several choices
 	 * available, such as {@link JFrame}, {@link Window}, or some third party
-	 * solution that extends <code>Container</code>.
+	 * solution that extends <code>Window</code>.
 	 * 
 	 * @return the application window
 	 */
-	public C getApplicationWindow() {
+	public W getApplicationWindow() {
 		return applicationWindow;
 	}
 
@@ -274,17 +274,16 @@ public abstract class GUIApplication<C extends Container> extends
 	 * @param applicationWindow
 	 *            the main application window
 	 */
-	protected void setApplicationWindow(C applicationWindow) {
+	protected void setApplicationWindow(W applicationWindow) {
 		this.applicationWindow = applicationWindow;
 	}
 
 	/**
 	 * Returns whether the window is maximized or not.
 	 * <p>
-	 * This method attempts to find the state of the <code>Container</code> to
-	 * see if it is maximized. A <code>JFrame</code> provides different methods
-	 * than <code>Window</code> in order to determine whether they are
-	 * maximized.
+	 * This method attempts to find the state of the <code>Window</code> to see
+	 * if it is maximized. A <code>JFrame</code> provides different methods than
+	 * <code>Window</code> in order to determine whether they are maximized.
 	 * 
 	 * @return <code>true</code> if maximized, else <code>false</code>
 	 */
@@ -307,15 +306,35 @@ public abstract class GUIApplication<C extends Container> extends
 	}
 
 	/**
-	 * Starts the application.
+	 * Starts the application with no arguments.
 	 * <p>
-	 * This is equivalent to <code>run(null)</code>.
+	 * This is equivalent to <code>run((Object) null)</code>.
 	 * 
-	 * @see #run(String[])
+	 * @see #run(Object...)
 	 */
 	@Override
 	public void run() {
-		run(null);
+		run((Object) null);
+	}
+
+	/**
+	 * Starts the application with the specified <code>args</code>. This method
+	 * should handle the following
+	 * <ul>
+	 * <li>processing the <code>args</code></li>
+	 * <li>invoking application life cycle events</li>
+	 * <li>showing the application GUI</li>
+	 * </ul>
+	 * <p>
+	 * This is equivalent to <code>run((Object[]) args)</code>.
+	 * 
+	 * @see #run(Object...)
+	 * @param args
+	 *            arguments from the command line
+	 */
+	@Override
+	public void run(String... args) {
+		run((Object[]) args);
 	}
 
 	/**
@@ -338,10 +357,10 @@ public abstract class GUIApplication<C extends Container> extends
 	 * </pre>
 	 * 
 	 * @param args
-	 *            arguments from the command line
+	 *            arguments parsed from the command line
 	 */
 	@Override
-	public void run(String[] args) {
+	public void run(Object... args) {
 		fireLifecycleChange(Lifecycle.STARTING);
 		if (getApplicationWindow() != null) {
 			getApplicationWindow().setVisible(true);

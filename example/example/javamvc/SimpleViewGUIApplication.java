@@ -1,7 +1,6 @@
 package example.javamvc;
 
 import java.awt.Component;
-import java.awt.Container;
 import java.util.prefs.Preferences;
 
 import javax.swing.BorderFactory;
@@ -40,10 +39,9 @@ public class SimpleViewGUIApplication extends SimpleGUIApplication {
 	}
 
 	@Override
-	protected void initializeWindow(Container applicationWindow) {
+	protected void initializeWindow(JFrame applicationWindow) {
 		super.initializeWindow(applicationWindow);
-		JFrame frame = (JFrame) applicationWindow;
-		frame.setTitle("Simple View Application");
+		applicationWindow.setTitle("Simple View Application");
 	}
 
 	@Override

@@ -1,6 +1,5 @@
 package example.javamvc;
 
-import java.awt.Container;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.util.prefs.Preferences;
@@ -39,13 +38,12 @@ public class SimpleGUIApplication extends MVCDesktopApplication<JFrame> {
 	}
 
 	@Override
-	protected void initializeWindow(Container applicationWindow) {
+	protected void initializeWindow(JFrame applicationWindow) {
 		super.initializeWindow(applicationWindow);
-		JFrame frame = (JFrame) applicationWindow;
 		// a window listener must be implemented to call
 		// DesktopApplication.exit() in order for our overridden exit() method
 		// to be called and save our preferences
-		frame.addWindowListener(new WindowAdapter() {
+		applicationWindow.addWindowListener(new WindowAdapter() {
 			@Override
 			public void windowClosing(WindowEvent e) {
 				exit(0);
@@ -56,11 +54,11 @@ public class SimpleGUIApplication extends MVCDesktopApplication<JFrame> {
 				exit(0);
 			}
 		});
-		frame.setTitle("Simple Application");
+		applicationWindow.setTitle("Simple Application");
 		setApplicationIcon(new ImageIcon(SimpleGUIApplication.class
 				.getClassLoader().getResource(
 						"example/resources/application-icon.png")));
-		frame.pack();
+		applicationWindow.pack();
 	}
 
 	@Override
@@ -75,7 +73,8 @@ public class SimpleGUIApplication extends MVCDesktopApplication<JFrame> {
 
 	@Override
 	protected void mapViewsAndModels() {
-		// do nothing since we're not using views or models for this simple example
+		// do nothing since we're not using views or models for this simple
+		// example
 	}
 
 	@Override

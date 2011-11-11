@@ -29,19 +29,48 @@ public abstract class ViewImpl<C extends Component> implements View<C> {
 	 * Constructs a <code>View</code> specifying the application the view
 	 * belongs to and the view component. This initializes the view by calling
 	 * {@link #initializeView()}.
+	 * <p>
+	 * The order in which methods in this constructor are called is
+	 * <ol>
+	 * <li>{@link #setApplication(GUIApplication)}</li>
+	 * <li>{@link #setView(Component)}</li>
+	 * <li>{@link #initialize(Object...)}</li>
+	 * <li>{@link #initializeView(Component)}</li>
+	 * </ol>
 	 * 
 	 * @see #setApplication(GUIApplication)
+	 * @see #setView(Component)
+	 * @see #initialize(Object...)
 	 * @see #initializeView(Component)
 	 * @param app
 	 *            the application this view belongs to
 	 * @param view
 	 *            the view component to be displayed on screen
+	 * @param objects
+	 *            parameters to be initialized prior to anything else in the
+	 *            view
 	 */
-	public ViewImpl(GUIApplication<?> app, C view) {
-		setApplication(app);
-		this.view = view;
+	public ViewImpl(GUIApplication<?> app, C view, Object... objects) {
 		subcomponents = new HashMap<String, Component>();
+		setApplication(app);
+		setView(view);
+		initialize(objects);
 		initializeView(view);
+	}
+
+	/**
+	 * Initializes the view objects.
+	 * <p>
+	 * This method is the first method called when a view is instantiated. Any
+	 * objects that need initialization in a derived constructor should be
+	 * initialized in this method, which is guaranteed to be called before
+	 * returning to the derived class's constructor (assuming that the
+	 * <code>ViewImpl</code> constructor is called).
+	 * 
+	 * @param objects
+	 *            objects that need initialization
+	 */
+	protected void initialize(Object... objects) {
 	}
 
 	/**
@@ -58,13 +87,24 @@ public abstract class ViewImpl<C extends Component> implements View<C> {
 
 	/**
 	 * Returns the view object which, for all intents and purposes, is the view.
-	 * This is the GUI component which is displayed on the screen.
+	 * This is the UI component which is displayed on the screen.
 	 * 
 	 * @return the view object
 	 */
 	@Override
 	public C getView() {
 		return view;
+	}
+
+	/**
+	 * Sets the view object which, for all intents and purposes, is the view.
+	 * This is the UI component which is displayed on the screen.
+	 * 
+	 * @param view
+	 *            the view object
+	 */
+	protected void setView(C view) {
+		this.view = view;
 	}
 
 	/**
