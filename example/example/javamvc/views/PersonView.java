@@ -10,7 +10,7 @@ import javax.swing.GroupLayout.Alignment;
 
 
 
-import usr.erichschroeter.applib.GUIApplication;
+import usr.erichschroeter.applib.GUIApplicationImpl;
 import usr.erichschroeter.applib.view.ViewImpl;
 
 /**
@@ -22,7 +22,7 @@ import usr.erichschroeter.applib.view.ViewImpl;
  */
 public class PersonView extends ViewImpl<JPanel> {
 
-	public PersonView(GUIApplication<?> app) {
+	public PersonView(GUIApplicationImpl<?> app) {
 		super(app, new JPanel());
 	}
 

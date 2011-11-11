@@ -6,12 +6,12 @@ import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 
-import usr.erichschroeter.applib.GUIApplication;
+import usr.erichschroeter.applib.GUIApplicationImpl;
 
 /**
  * This is an example of how an end user would use the <b>javamvc</b> library in
  * their own GUI application. This example is intended to be simple showing how
- * to quickly get a {@link GUIApplication} implemented. This differs from the
+ * to quickly get a {@link GUIApplicationImpl} implemented. This differs from the
  * {@link SimpleGUIApplication} in that includes setting up a view.
  * 
  * @author Erich Schroeter

@@ -4,7 +4,7 @@ import javax.swing.AbstractAction;
 
 /**
  * A <code>GUIApplicationAction</code> is a an action that contains a reference
- * to the {@link GUIApplication}.
+ * to the {@link GUIApplicationImpl}.
  * 
  * @author Erich Schroeter
  */
@@ -12,7 +12,7 @@ import javax.swing.AbstractAction;
 public abstract class GUIApplicationAction extends AbstractAction {
 
 	/** The application this action is used in. */
-	private GUIApplication<?> application;
+	private GUIApplicationImpl<?> application;
 
 	/**
 	 * Constructs a <code>GUIApplicationAction</code> specifying the application
@@ -21,7 +21,7 @@ public abstract class GUIApplicationAction extends AbstractAction {
 	 * @param application
 	 *            the application
 	 */
-	public GUIApplicationAction(GUIApplication<?> application) {
+	public GUIApplicationAction(GUIApplicationImpl<?> application) {
 		setApplication(application);
 	}
 
@@ -30,7 +30,7 @@ public abstract class GUIApplicationAction extends AbstractAction {
 	 * 
 	 * @return the application
 	 */
-	public GUIApplication<?> getApplication() {
+	public GUIApplicationImpl<?> getApplication() {
 		return application;
 	}
 
@@ -40,7 +40,7 @@ public abstract class GUIApplicationAction extends AbstractAction {
 	 * @param application
 	 *            the application
 	 */
-	public void setApplication(GUIApplication<?> application) {
+	public void setApplication(GUIApplicationImpl<?> application) {
 		this.application = application;
 	}
 

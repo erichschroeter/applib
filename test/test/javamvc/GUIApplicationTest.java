@@ -13,15 +13,15 @@ import org.junit.Before;
 import org.junit.Test;
 
 import usr.erichschroeter.applib.DesktopApplicationImpl;
-import usr.erichschroeter.applib.GUIApplication;
+import usr.erichschroeter.applib.GUIApplicationImpl;
 
 public class GUIApplicationTest {
 
-	private GUIApplication<JFrame> app;
+	private GUIApplicationImpl<JFrame> app;
 
 	@Before
 	public void setUp() throws Exception {
-		app = new GUIApplication<JFrame>(new JFrame()) {
+		app = new GUIApplicationImpl<JFrame>(new JFrame()) {
 
 			@Override
 			public String getVersion() {
@@ -70,7 +70,7 @@ public class GUIApplicationTest {
 				.getClassLoader().getResource(
 						"test/resources/application-icon.png"));
 
-		app = new GUIApplication<JFrame>(new JFrame()) {
+		app = new GUIApplicationImpl<JFrame>(new JFrame()) {
 
 			@Override
 			public String getVersion() {

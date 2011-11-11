@@ -2,7 +2,7 @@ package usr.erichschroeter.applib.view;
 
 import java.awt.Component;
 
-import usr.erichschroeter.applib.GUIApplication;
+import usr.erichschroeter.applib.GUIApplicationImpl;
 
 /**
  * The <code>View</code> interface provides methods required for a view. A view
@@ -18,7 +18,7 @@ public interface View<C extends Component> {
 	 * 
 	 * @return the GUI application
 	 */
-	public GUIApplication<?> getApplication();
+	public GUIApplicationImpl<?> getApplication();
 
 	/**
 	 * Returns the view object which, for all intents and purposes, is the view.

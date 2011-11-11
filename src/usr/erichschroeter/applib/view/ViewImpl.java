@@ -4,7 +4,7 @@ import java.awt.Component;
 import java.util.HashMap;
 import java.util.Map;
 
-import usr.erichschroeter.applib.GUIApplication;
+import usr.erichschroeter.applib.GUIApplicationImpl;
 
 /**
  * A <code>ViewImpl</code> is a default implementation of the {@link View}
@@ -21,7 +21,7 @@ public abstract class ViewImpl<C extends Component> implements View<C> {
 	 */
 	protected C view;
 	/** A reference to the GUI application. */
-	protected GUIApplication<?> application;
+	protected GUIApplicationImpl<?> application;
 	/** A map of keys to subcomponents in the {@link #view}. */
 	protected Map<String, ? super Component> subcomponents;
 
@@ -32,13 +32,13 @@ public abstract class ViewImpl<C extends Component> implements View<C> {
 	 * <p>
 	 * The order in which methods in this constructor are called is
 	 * <ol>
-	 * <li>{@link #setApplication(GUIApplication)}</li>
+	 * <li>{@link #setApplication(GUIApplicationImpl)}</li>
 	 * <li>{@link #setView(Component)}</li>
 	 * <li>{@link #initialize(Object...)}</li>
 	 * <li>{@link #initializeView(Component)}</li>
 	 * </ol>
 	 * 
-	 * @see #setApplication(GUIApplication)
+	 * @see #setApplication(GUIApplicationImpl)
 	 * @see #setView(Component)
 	 * @see #initialize(Object...)
 	 * @see #initializeView(Component)
@@ -50,7 +50,7 @@ public abstract class ViewImpl<C extends Component> implements View<C> {
 	 *            parameters to be initialized prior to anything else in the
 	 *            view
 	 */
-	public ViewImpl(GUIApplication<?> app, C view, Object... objects) {
+	public ViewImpl(GUIApplicationImpl<?> app, C view, Object... objects) {
 		subcomponents = new HashMap<String, Component>();
 		setApplication(app);
 		setView(view);
@@ -162,7 +162,7 @@ public abstract class ViewImpl<C extends Component> implements View<C> {
 	 * @return the GUI application
 	 */
 	@Override
-	public GUIApplication<?> getApplication() {
+	public GUIApplicationImpl<?> getApplication() {
 		return application;
 	}
 
@@ -172,7 +172,7 @@ public abstract class ViewImpl<C extends Component> implements View<C> {
 	 * @param application
 	 *            the GUI application
 	 */
-	public void setApplication(GUIApplication<?> application) {
+	public void setApplication(GUIApplicationImpl<?> application) {
 		this.application = application;
 	}
 
