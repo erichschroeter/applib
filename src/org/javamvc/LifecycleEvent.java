@@ -10,12 +10,12 @@ import java.util.EventObject;
  * @author Erich Schroeter
  */
 @SuppressWarnings("serial")
-public class LifecycleChangeEvent extends EventObject {
+public class LifecycleEvent extends EventObject {
 
 	/** The lifecycle type this event represents. */
 	private Lifecycle lifecycle;
 
-	public LifecycleChangeEvent(Object source, Lifecycle lifecycle) {
+	public LifecycleEvent(Object source, Lifecycle lifecycle) {
 		super(source);
 		setLifecycle(lifecycle);
 	}

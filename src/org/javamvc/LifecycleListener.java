@@ -6,7 +6,7 @@ package org.javamvc;
  * 
  * @author Erich Schroeter
  */
-public interface ILifecycleListener {
+public interface LifecycleListener {
 
 	/**
 	 * Handles performing logic when the <code>LifecycleEvent</code> occurs.
@@ -14,5 +14,5 @@ public interface ILifecycleListener {
 	 * @param e
 	 *            the lifecycle event
 	 */
-	public void lifecycleChanged(LifecycleChangeEvent e);
+	public void lifecycleChanged(LifecycleEvent e);
 }

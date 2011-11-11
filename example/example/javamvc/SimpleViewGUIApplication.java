@@ -11,9 +11,9 @@ import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 
 import org.javamvc.GUIApplication;
-import org.javamvc.ILifecycleListener;
+import org.javamvc.LifecycleListener;
 import org.javamvc.Lifecycle;
-import org.javamvc.LifecycleChangeEvent;
+import org.javamvc.LifecycleEvent;
 import org.javamvc.model.Model;
 
 import example.javamvc.models.Person;
@@ -59,10 +59,10 @@ public class SimpleViewGUIApplication extends SimpleGUIApplication {
 		final CompanyView companyView = new CompanyView(this);
 		getViewManager().registerView("company", companyView);
 
-		addLifecycleListener(Lifecycle.STARTED, new ILifecycleListener() {
+		addLifecycleListener(Lifecycle.STARTED, new LifecycleListener() {
 
 			@Override
-			public void lifecycleChanged(LifecycleChangeEvent e) {
+			public void lifecycleChanged(LifecycleEvent e) {
 				// example of how to retrieve a view through the ViewManager
 				Component personView = (Component) getViewManager().getView(
 						"person").getView();

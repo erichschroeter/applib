@@ -72,7 +72,7 @@ import org.javamvc.utils.Utils;
  * @author Erich Schroeter
  */
 public abstract class GUIApplication<W extends Window> extends
-		DesktopApplication {
+		DesktopApplicationImpl {
 
 	/** The reference to the application window. */
 	protected W applicationWindow;

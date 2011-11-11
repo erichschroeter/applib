@@ -4,7 +4,7 @@ import java.util.List;
 
 /**
  * A <code>LifecycleNotifier</code> implementor handles keeping references to
- * {@link ILifecycleListener}s and provides methods to manage the containers
+ * {@link LifecycleListener}s and provides methods to manage the containers
  * holding those references.
  * 
  * @author Erich Schroeter
@@ -21,7 +21,7 @@ public interface ILifecycleNotifier {
 	 * @param listener
 	 *            the lifecycle listener to be added
 	 */
-	public void addLifecycleListener(ILifecycleListener listener);
+	public void addLifecycleListener(LifecycleListener listener);
 
 	/**
 	 * Adds a <code>LifecycleListener</code> to the listener list for a specific
@@ -36,7 +36,7 @@ public interface ILifecycleNotifier {
 	 *            the lifecycle listener to be added
 	 */
 	public void addLifecycleListener(Lifecycle lifecycle,
-			ILifecycleListener listener);
+			LifecycleListener listener);
 
 	/**
 	 * Removes a <code>LifecycleListener</code> from the listener list. This
@@ -49,7 +49,7 @@ public interface ILifecycleNotifier {
 	 * @param listener
 	 *            the lifecycle listener to be removed
 	 */
-	public void removeLifecycleListener(ILifecycleListener listener);
+	public void removeLifecycleListener(LifecycleListener listener);
 
 	/**
 	 * Removes a <code>LifecycleListener</code> from the listener list for a
@@ -64,7 +64,7 @@ public interface ILifecycleNotifier {
 	 *            the lifecycle listener to be removed
 	 */
 	public void removeLifecycleListener(Lifecycle lifecycle,
-			ILifecycleListener listener);
+			LifecycleListener listener);
 
 	/**
 	 * Returns the list of all the lifecycle listeners registered for all
@@ -73,7 +73,7 @@ public interface ILifecycleNotifier {
 	 * @return all of this class's <code>LifecycleListener</code>s or
 	 *         <code>null</code> if no listeners are currently registered.
 	 */
-	public List<ILifecycleListener> getLifecycleListeners();
+	public List<LifecycleListener> getLifecycleListeners();
 
 	/**
 	 * Returns the list of all the lifecycle listeners registered for a specific
@@ -84,6 +84,6 @@ public interface ILifecycleNotifier {
 	 * @return all of this class's <code>LifecycleListener</code>s or
 	 *         <code>null</code> if no listeners are currently registered.
 	 */
-	public List<ILifecycleListener> getLifecycleListeners(Lifecycle lifecycle);
+	public List<LifecycleListener> getLifecycleListeners(Lifecycle lifecycle);
 
 }

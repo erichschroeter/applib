@@ -18,7 +18,7 @@ import org.javamvc.view.ViewManager;
  * 
  * @author Erich Schroeter
  */
-public abstract class MVCDesktopApplication<W extends Window> extends
+public abstract class Controller<W extends Window> extends
 		GUIApplication<W> {
 
 	/** The object managing the application's models. */
@@ -47,7 +47,7 @@ public abstract class MVCDesktopApplication<W extends Window> extends
 	 * @param objects
 	 *            objects that need initialization
 	 */
-	public MVCDesktopApplication(W applicationWindow, Object... objects) {
+	public Controller(W applicationWindow, Object... objects) {
 		super(applicationWindow, objects); // initialize preferences and window
 		modelMap = new HashMap<String, String>();
 		viewMap = new HashMap<String, String>();
@@ -86,7 +86,7 @@ public abstract class MVCDesktopApplication<W extends Window> extends
 	 * This is provided publicly so classes can register to listen to manager
 	 * events. It is recommended to not use the mutator methods in the
 	 * <code>ModelManager</code> directly and instead use the methods provided
-	 * by {@link MVCDesktopApplication}.
+	 * by {@link Controller}.
 	 * 
 	 * @return the model manager
 	 */
@@ -110,7 +110,7 @@ public abstract class MVCDesktopApplication<W extends Window> extends
 	 * This is provided publicly so classes can register to listen to manager
 	 * events. It is recommended to not use the mutator methods in the
 	 * <code>ViewManager</code> directly and instead use the methods provided by
-	 * {@link MVCDesktopApplication}.
+	 * {@link Controller}.
 	 * 
 	 * @return the view manager
 	 */

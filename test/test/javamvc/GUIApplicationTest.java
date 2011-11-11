@@ -9,7 +9,7 @@ import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 
-import org.javamvc.DesktopApplication;
+import org.javamvc.DesktopApplicationImpl;
 import org.javamvc.GUIApplication;
 import org.junit.Before;
 import org.junit.Test;
@@ -61,7 +61,7 @@ public class GUIApplicationTest {
 
 	/**
 	 * Tests to ensure the <code>JFrame</code> icon image is set when
-	 * {@link DesktopApplication#setApplicationIcon(Icon)} is called.
+	 * {@link DesktopApplicationImpl#setApplicationIcon(Icon)} is called.
 	 */
 	@Test
 	public void testApplicationIconSetsJFrameImages() {

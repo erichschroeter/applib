@@ -10,7 +10,7 @@ import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 
 import org.javamvc.GUIApplication;
-import org.javamvc.MVCDesktopApplication;
+import org.javamvc.Controller;
 
 /**
  * This is an example of how an end user would use the <b>javamvc</b> library in
@@ -20,7 +20,7 @@ import org.javamvc.MVCDesktopApplication;
  * 
  * @author Erich Schroeter
  */
-public class SimpleGUIApplication extends MVCDesktopApplication<JFrame> {
+public class SimpleGUIApplication extends Controller<JFrame> {
 
 	/**
 	 * The application version. This should be incremented prior to each
