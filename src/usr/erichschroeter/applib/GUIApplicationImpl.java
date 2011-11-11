@@ -95,7 +95,7 @@ public abstract class GUIApplicationImpl<W extends Window> extends
 	 * @param objects
 	 *            objects that need initialization
 	 */
-	public GUIApplicationImpl(W applicationWindow, Object... objects) {
+	protected GUIApplicationImpl(W applicationWindow, Object... objects) {
 		super(objects); // initialize preferences
 		setActionMap(new ActionMap());
 		installActions(getActionMap());
@@ -297,69 +297,50 @@ public abstract class GUIApplicationImpl<W extends Window> extends
 	}
 
 	@Override
+	public Icon getApplicationIcon() {
+		return applicationIcon;
+	}
+
+	/**
+	 * Sets the application icon. This is the icon to be associated with the
+	 * application and may be displayed in multiple locations depending on the
+	 * platform (e.g. Windows, Linux, Mac, etc).
+	 * <p>
+	 * A <code>PropertyChangeEvent</code> is fired when the application icon is
+	 * changed.
+	 * 
+	 * @param applicationIcon
+	 *            the application icon
+	 */
+	@Override
 	public void setApplicationIcon(Icon applicationIcon) {
-		super.setApplicationIcon(applicationIcon);
+		Icon old = getApplicationIcon();
+		this.applicationIcon = applicationIcon;
 		// set the upper left icon of frame
 		getApplicationWindow().setIconImage(Utils.iconToImage(applicationIcon));
+		firePropertyChange("application.icon", old, applicationIcon);
 	}
 
 	/**
-	 * Starts the application with no arguments.
+	 * Starts the GUI application.
 	 * <p>
-	 * This is equivalent to <code>run((Object) null)</code>.
-	 * 
-	 * @see #run(Object...)
-	 */
-	@Override
-	public void run() {
-		run((Object) null);
-	}
-
-	/**
-	 * Starts the application with the specified <code>args</code>. This method
-	 * should handle the following
+	 * This method handles
 	 * <ul>
-	 * <li>processing the <code>args</code></li>
-	 * <li>invoking application life cycle events</li>
+	 * <li>firing application life cycle events</li>
 	 * <li>showing the application GUI</li>
 	 * </ul>
 	 * <p>
-	 * This is equivalent to <code>run((Object[]) args)</code>.
-	 * 
-	 * @see #run(Object...)
-	 * @param args
-	 *            arguments from the command line
-	 */
-	@Override
-	public void run(String... args) {
-		run((Object[]) args);
-	}
-
-	/**
-	 * Starts the application with the specified <code>args</code>. This method
-	 * should handle the following
-	 * <ul>
-	 * <li>processing the <code>args</code></li>
-	 * <li>invoking application life cycle events</li>
-	 * <li>showing the application GUI</li>
-	 * </ul>
-	 * <p>
-	 * The default implementation of this is
+	 * The default implementation is below
 	 * 
 	 * <pre>
-	 * fireLifecycleChange(Lifecycle.STARTING);
 	 * if (getApplicationWindow() != null) {
 	 * 	getApplicationWindow().setVisible(true);
 	 * }
-	 * fireLifecycleChange(Lifecycle.STARTED);
+	 * fireLifecycleChange(new LifecycleEvent(this, Lifecycle.STARTED));
 	 * </pre>
-	 * 
-	 * @param args
-	 *            arguments parsed from the command line
 	 */
 	@Override
-	public void run(Object... args) {
-		fireLifecycleChange(new LifecycleEvent(this, Lifecycle.STARTING));
+	public void run() {
 		if (getApplicationWindow() != null) {
 			getApplicationWindow().setVisible(true);
 		}

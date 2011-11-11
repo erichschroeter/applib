@@ -1,6 +1,8 @@
 package example.calculator;
 
 import usr.erichschroeter.applib.DesktopApplicationImpl;
+import usr.erichschroeter.applib.Lifecycle;
+import usr.erichschroeter.applib.LifecycleEvent;
 
 /**
  * The <code>CalculatorApplication</code> handles performing a
@@ -14,6 +16,7 @@ public class CalculatorApplication extends DesktopApplicationImpl {
 	private MathOperation operation;
 
 	public CalculatorApplication(MathOperation operation) {
+		super();
 		this.operation = operation;
 	}
 
@@ -23,7 +26,7 @@ public class CalculatorApplication extends DesktopApplicationImpl {
 	}
 
 	@Override
-	public void run(Object... args) {
+	public void run() {
 		if (operation != null) {
 			try {
 				operation.perform();
@@ -33,6 +36,7 @@ public class CalculatorApplication extends DesktopApplicationImpl {
 				e.printStackTrace();
 			}
 		}
+		fireLifecycleChange(new LifecycleEvent(this, Lifecycle.STARTED));
 	}
 
 }

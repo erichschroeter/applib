@@ -49,11 +49,17 @@ public abstract class DesktopApplicationImpl implements DesktopApplication {
 	/** Whether the preferences will be saved on exiting the application. */
 	private boolean savePreferencesOnExit;
 
+	protected DesktopApplicationImpl() {
+		this((Object[]) null);
+	}
+
 	/**
 	 * Constructs a default <code>DesktopApplication</code>. This initializes
 	 * the application preferences by calling
 	 * {@link #installApplicationPreferences(Preferences)} passing the result of
 	 * {@link #getApplicationPreferences()}.
+	 * <p>
+	 * A lifecycle starting event is fired prior to calling any methods.
 	 * 
 	 * @see #getApplicationPreferences()
 	 * @see #installApplicationPreferences(Preferences)
@@ -62,9 +68,10 @@ public abstract class DesktopApplicationImpl implements DesktopApplication {
 	 *            objects that need initialization in
 	 *            <code>initializeApplication(Object...)</code>
 	 */
-	public DesktopApplicationImpl(Object... objects) {
+	protected DesktopApplicationImpl(Object... objects) {
 		properties = new PropertyChangeSupport(this);
 		lifecycleListeners = new EventListenerList();
+		fireLifecycleChange(new LifecycleEvent(this, Lifecycle.STARTING));
 		initializeApplication(objects);
 		installApplicationPreferences(getApplicationPreferences());
 	}
@@ -85,33 +92,21 @@ public abstract class DesktopApplicationImpl implements DesktopApplication {
 	}
 
 	/**
-	 * Starts the application with no arguments.
+	 * Starts the desktop application.
 	 * <p>
-	 * This is equivalent to <code>run((Object[]) null)</code>.
-	 * 
-	 * @see #run(Object...)
-	 */
-	public void run() {
-		run((Object[]) null);
-	}
-
-	/**
-	 * Starts the application with the specified <code>args</code>. This method
-	 * should handle things such as
+	 * This method handles
 	 * <ul>
-	 * <li>processing the <code>args</code></li>
-	 * <li>invoking application life cycle events</li>
-	 * <li>showing the application GUI</li>
+	 * <li>firing application life cycle started event</li>
 	 * </ul>
 	 * <p>
-	 * This is equivalent to <code>run((Object[]) args)</code>.
+	 * The default implementation is below
 	 * 
-	 * @see #run(Object...)
-	 * @param args
-	 *            arguments from the command line
+	 * <pre>
+	 * fireLifecycleChange(new LifecycleEvent(this, Lifecycle.STARTED));
+	 * </pre>
 	 */
-	public void run(String... args) {
-		run((Object[]) args);
+	public void run() {
+		fireLifecycleChange(new LifecycleEvent(this, Lifecycle.STARTED));
 	}
 
 	/**
@@ -162,29 +157,6 @@ public abstract class DesktopApplicationImpl implements DesktopApplication {
 		}
 		fireLifecycleChange(new LifecycleEvent(this, Lifecycle.STOPPED));
 		System.exit(code);
-	}
-
-	@Override
-	public Icon getApplicationIcon() {
-		return applicationIcon;
-	}
-
-	/**
-	 * Sets the application icon. This is the icon to be associated with the
-	 * application and may be displayed in multiple locations depending on the
-	 * platform (e.g. Windows, Linux, Mac, etc).
-	 * <p>
-	 * A <code>PropertyChangeEvent</code> is fired when the application icon is
-	 * changed.
-	 * 
-	 * @param applicationIcon
-	 *            the application icon
-	 */
-	@Override
-	public void setApplicationIcon(Icon applicationIcon) {
-		Icon old = getApplicationIcon();
-		this.applicationIcon = applicationIcon;
-		firePropertyChange("application.icon", old, applicationIcon);
 	}
 
 	/**

@@ -116,7 +116,7 @@
 		<mkdir dir="${javadoc.location}" />
 		<javadoc packagenames="usr.erichschroeter.applib.*" sourcepath="src"
 			author="true" destdir="${javadoc.location}">
-			<doctitle><![CDATA[<h1>Java MVC</h1>]]></doctitle>
+			<doctitle><![CDATA[<h1>Application Library</h1>]]></doctitle>
 			<bottom><![CDATA[<i>&#169; 2010 Erich Schroeter. All rights reserved</i>]]></bottom>
 			<tag name="TODO" scope="all" description="To do:" />
 		</javadoc>
