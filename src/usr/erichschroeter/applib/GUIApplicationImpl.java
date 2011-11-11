@@ -300,10 +300,7 @@ public abstract class GUIApplicationImpl<W extends Window> extends
 	public void setApplicationIcon(Icon applicationIcon) {
 		super.setApplicationIcon(applicationIcon);
 		// set the upper left icon of frame
-		if ((getApplicationWindow() instanceof Window)) {
-			((Window) getApplicationWindow()).setIconImage(Utils
-					.iconToImage(applicationIcon));
-		}
+		getApplicationWindow().setIconImage(Utils.iconToImage(applicationIcon));
 	}
 
 	/**
@@ -362,11 +359,11 @@ public abstract class GUIApplicationImpl<W extends Window> extends
 	 */
 	@Override
 	public void run(Object... args) {
-		fireLifecycleChange(Lifecycle.STARTING);
+		fireLifecycleChange(new LifecycleEvent(this, Lifecycle.STARTING));
 		if (getApplicationWindow() != null) {
 			getApplicationWindow().setVisible(true);
 		}
-		fireLifecycleChange(Lifecycle.STARTED);
+		fireLifecycleChange(new LifecycleEvent(this, Lifecycle.STARTED));
 	}
 
 }

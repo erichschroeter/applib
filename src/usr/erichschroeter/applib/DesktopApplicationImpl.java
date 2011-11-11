@@ -3,12 +3,11 @@ package usr.erichschroeter.applib;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
-import java.util.Vector;
 import java.util.prefs.Preferences;
 
 import javax.swing.Icon;
+import javax.swing.event.EventListenerList;
 
 /**
  * <code>DesktopApplication</code> provides a default implementation of the
@@ -38,17 +37,11 @@ import javax.swing.Icon;
 public abstract class DesktopApplicationImpl implements DesktopApplication {
 
 	/** Used for managing property listeners. */
-	protected PropertyChangeSupport properties;
-	/**
-	 * The container keeping track of objects listening for any/all
-	 * <code>Lifecycle</code> types.
-	 */
-	protected List<LifecycleListener> lifecycleListeners;
-	/**
-	 * The container keeping track of objects listening for specific
-	 * <code>Lifecycle</code> type.
-	 */
-	protected Map<Lifecycle, List<LifecycleListener>> specificLifecycleListeners;
+	protected transient PropertyChangeSupport properties;
+	/** Listeners to be notified of any and all lifecycle events. */
+	protected transient EventListenerList lifecycleListeners;
+	/** Listeners to be notified of a specific lifecycle event. */
+	protected transient Map<Lifecycle, EventListenerList> specificLifecycleListeners;
 	/** The reference to the application icon. */
 	protected Icon applicationIcon;
 	/** The state of the application in its life cycle. */
@@ -71,6 +64,7 @@ public abstract class DesktopApplicationImpl implements DesktopApplication {
 	 */
 	public DesktopApplicationImpl(Object... objects) {
 		properties = new PropertyChangeSupport(this);
+		lifecycleListeners = new EventListenerList();
 		initializeApplication(objects);
 		installApplicationPreferences(getApplicationPreferences());
 	}
@@ -162,11 +156,11 @@ public abstract class DesktopApplicationImpl implements DesktopApplication {
 	 */
 	@Override
 	public void exit(int code) {
-		fireLifecycleChange(Lifecycle.STOPPING);
+		fireLifecycleChange(new LifecycleEvent(this, Lifecycle.STOPPING));
 		if (isSavePreferencesOnExit()) {
 			saveApplicationPreferences();
 		}
-		fireLifecycleChange(Lifecycle.STOPPED);
+		fireLifecycleChange(new LifecycleEvent(this, Lifecycle.STOPPED));
 		System.exit(code);
 	}
 
@@ -413,33 +407,31 @@ public abstract class DesktopApplicationImpl implements DesktopApplication {
 		properties.firePropertyChange(propertyName, oldValue, newValue);
 	}
 
-	//
-	// ILifecycleNotifier members
-	//
-
 	public void addLifecycleListener(LifecycleListener listener) {
 		// don't instantiate until it's needed
-		lifecycleListeners = lifecycleListeners != null ? lifecycleListeners
-				: new Vector<LifecycleListener>();
-		lifecycleListeners.add(listener);
+		if (lifecycleListeners == null) {
+			lifecycleListeners = new EventListenerList();
+		}
+		lifecycleListeners.add(LifecycleListener.class, listener);
 	}
 
 	public void addLifecycleListener(Lifecycle lifecycle,
 			LifecycleListener listener) {
 		// don't instantiate anything until it's needed
-		specificLifecycleListeners = specificLifecycleListeners != null ? specificLifecycleListeners
-				: new HashMap<Lifecycle, List<LifecycleListener>>();
+		if (specificLifecycleListeners == null) {
+			specificLifecycleListeners = new HashMap<Lifecycle, EventListenerList>();
+		}
 		// if a list doesn't exist, create it
 		if (!specificLifecycleListeners.containsKey(lifecycle)) {
-			specificLifecycleListeners.put(lifecycle,
-					new Vector<LifecycleListener>());
+			specificLifecycleListeners.put(lifecycle, new EventListenerList());
 		}
-		specificLifecycleListeners.get(lifecycle).add(listener);
+		specificLifecycleListeners.get(lifecycle).add(LifecycleListener.class,
+				listener);
 	}
 
 	public void removeLifecycleListener(LifecycleListener listener) {
 		if (lifecycleListeners != null && listener != null) {
-			lifecycleListeners.remove(listener);
+			lifecycleListeners.remove(LifecycleListener.class, listener);
 		}
 	}
 
@@ -447,16 +439,18 @@ public abstract class DesktopApplicationImpl implements DesktopApplication {
 			LifecycleListener listener) {
 		if (specificLifecycleListeners != null && listener != null
 				&& specificLifecycleListeners.containsKey(lifecycle)) {
-			specificLifecycleListeners.get(lifecycle).remove(listener);
+			specificLifecycleListeners.get(lifecycle).remove(
+					LifecycleListener.class, listener);
 		}
 	}
 
-	public List<LifecycleListener> getLifecycleListeners() {
-		return lifecycleListeners;
+	public LifecycleListener[] getLifecycleListeners() {
+		return lifecycleListeners.getListeners(LifecycleListener.class);
 	}
 
-	public List<LifecycleListener> getLifecycleListeners(Lifecycle lifecycle) {
-		return specificLifecycleListeners.get(lifecycle);
+	public LifecycleListener[] getLifecycleListeners(Lifecycle lifecycle) {
+		return specificLifecycleListeners.get(lifecycle).getListeners(
+				LifecycleListener.class);
 	}
 
 	/**
@@ -470,19 +464,31 @@ public abstract class DesktopApplicationImpl implements DesktopApplication {
 	 * @param lifecycle
 	 *            the lifecycle type representing the state of the application
 	 */
-	protected void fireLifecycleChange(Lifecycle lifecycle) {
-		// notify listeners for specific properties
+	protected void fireLifecycleChange(LifecycleEvent event) {
+		// Guaranteed to return a non-null array
+		Object[] listeners;
 		if (specificLifecycleListeners != null
-				&& specificLifecycleListeners.containsKey(lifecycle)) {
-			for (LifecycleListener l : specificLifecycleListeners
-					.get(lifecycle)) {
-				l.lifecycleChanged(new LifecycleEvent(this, lifecycle));
+				&& specificLifecycleListeners.containsKey(event.getLifecycle())) {
+			listeners = specificLifecycleListeners.get(event.getLifecycle())
+					.getListenerList();
+			// Process the listeners last to first, notifying
+			// those that are interested in this event
+			for (int i = listeners.length - 2; i >= 0; i -= 2) {
+				if (listeners[i] == LifecycleListener.class) {
+					((LifecycleListener) listeners[i + 1])
+							.lifecycleChanged(event);
+				}
 			}
 		}
 		if (lifecycleListeners != null) {
-			// notify listeners for all properties
-			for (LifecycleListener l : lifecycleListeners) {
-				l.lifecycleChanged(new LifecycleEvent(this, lifecycle));
+			listeners = lifecycleListeners.getListenerList();
+			// Process the listeners last to first, notifying
+			// those that are interested in this event
+			for (int i = listeners.length - 2; i >= 0; i -= 2) {
+				if (listeners[i] == LifecycleListener.class) {
+					((LifecycleListener) listeners[i + 1])
+							.lifecycleChanged(event);
+				}
 			}
 		}
 	}
