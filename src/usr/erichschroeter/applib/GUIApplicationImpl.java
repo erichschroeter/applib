@@ -79,29 +79,56 @@ public abstract class GUIApplicationImpl<W extends Window> extends
 	/** The application action map. */
 	protected ActionMap actionMap;
 
+	/** @see #GUIApplicationImpl(Object...) */
+	protected GUIApplicationImpl() {
+		this((Object[]) null);
+	}
+
 	/**
 	 * Constructs a <code>GUIApplication</code> specifying the type of
-	 * <code>Window</code> to use for the main application window. This
-	 * initializes the application window by calling
-	 * {@link #initializeWindow(Window)} and initializes the application
-	 * preferences by calling {@link #installApplicationPreferences()}.
+	 * <code>Window</code> to use for the main application window.
 	 * <p>
-	 * The <code>applicationWindow</code> is what will be returned by the
+	 * The <code>Window</code> is created by calling
+	 * {@link #createApplicationWindow()} and then initialized by calling
+	 * {@link #initializeWindow(Window)}.
+	 * <p>
+	 * A sequence of methods are called upon instantiation, which allows for
+	 * further customization via overriding when creating an application. The
+	 * sequence of methods called on instantiation are as follows
+	 * <ol>
+	 * <li>{@link #initializeApplication(Object...)}</li>
+	 * <li>{@link #getApplicationPreferences()}</li>
+	 * <li>{@link #installApplicationPreferences(Preferences)}</li>
+	 * <li>{@link #createActionMap()}</li>
+	 * <li>{@link #installActions(ActionMap)}</li>
+	 * <li>{@link #createApplicationWindow()}</li>
+	 * <li>{@link #initializeWindow(Window)}</li>
+	 * </ol>
+	 * 
+	 * @see #createActionMap()
+	 * @see #createApplicationWindow()
+	 * @see #initializeWindow(Window)
+	 * @see #getApplicationWindow()
+	 * @param objects
+	 *            objects that need initialization in
+	 *            {@link #initializeApplication(Object...)}
+	 */
+	protected GUIApplicationImpl(Object... objects) {
+		super(objects); // initialize preferences
+		setActionMap(createActionMap());
+		installActions(getActionMap());
+		setApplicationWindow(createApplicationWindow());
+		initializeWindow(getApplicationWindow());
+	}
+
+	/**
+	 * Creates and returns the application window. The returned result is set as
+	 * the application's window which can be retrieved by calling
 	 * {@link #getApplicationWindow()}.
 	 * 
-	 * @see #getApplicationWindow()
-	 * @param applicationWindow
-	 *            the object to use as the main application window
-	 * @param objects
-	 *            objects that need initialization
+	 * @return the application window
 	 */
-	protected GUIApplicationImpl(W applicationWindow, Object... objects) {
-		super(objects); // initialize preferences
-		setActionMap(new ActionMap());
-		installActions(getActionMap());
-		setApplicationWindow(applicationWindow);
-		initializeWindow(applicationWindow);
-	}
+	protected abstract W createApplicationWindow();
 
 	/**
 	 * Initializes the desktop application window. This can be overridden in
@@ -252,6 +279,15 @@ public abstract class GUIApplicationImpl<W extends Window> extends
 	 */
 	protected void setActionMap(ActionMap actionMap) {
 		this.actionMap = actionMap;
+	}
+
+	/**
+	 * Creates and returns the action map to be used by the application.
+	 * 
+	 * @return the application action map
+	 */
+	protected ActionMap createActionMap() {
+		return new ActionMap();
 	}
 
 	/**

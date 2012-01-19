@@ -49,6 +49,7 @@ public abstract class DesktopApplicationImpl implements DesktopApplication {
 	/** Whether the preferences will be saved on exiting the application. */
 	private boolean savePreferencesOnExit;
 
+	/** @see #DesktopApplicationImpl(Object...) */
 	protected DesktopApplicationImpl() {
 		this((Object[]) null);
 	}
@@ -71,7 +72,6 @@ public abstract class DesktopApplicationImpl implements DesktopApplication {
 	protected DesktopApplicationImpl(Object... objects) {
 		properties = new PropertyChangeSupport(this);
 		lifecycleListeners = new EventListenerList();
-		fireLifecycleChange(new LifecycleEvent(this, Lifecycle.STARTING));
 		initializeApplication(objects);
 		installApplicationPreferences(getApplicationPreferences());
 	}

@@ -21,11 +21,16 @@ public class GUIApplicationTest {
 
 	@Before
 	public void setUp() throws Exception {
-		app = new GUIApplicationImpl<JFrame>(new JFrame()) {
+		app = new GUIApplicationImpl<JFrame>() {
 
 			@Override
 			public String getVersion() {
 				return "1.2.3";
+			}
+
+			@Override
+			protected JFrame createApplicationWindow() {
+				return new JFrame();
 			}
 		};
 	}
@@ -70,11 +75,16 @@ public class GUIApplicationTest {
 				.getClassLoader().getResource(
 						"test/resources/application-icon.png"));
 
-		app = new GUIApplicationImpl<JFrame>(new JFrame()) {
+		app = new GUIApplicationImpl<JFrame>() {
 
 			@Override
 			public String getVersion() {
 				return "1.2.3";
+			}
+
+			@Override
+			protected JFrame createApplicationWindow() {
+				return new JFrame();
 			}
 		};
 

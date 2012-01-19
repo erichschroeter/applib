@@ -25,7 +25,7 @@ public class CalculatorGuiApplication extends GUIApplicationImpl<JFrame> {
 	private JTextField textField;
 
 	public CalculatorGuiApplication() {
-		super(new JFrame("Calculator"));
+		super();
 		setApplicationIcon(null);
 		setSavePreferencesOnExit(true);
 	}
@@ -111,6 +111,11 @@ public class CalculatorGuiApplication extends GUIApplicationImpl<JFrame> {
 				textField.setText(textField.getText().concat("."));
 			}
 		});
+	}
+
+	@Override
+	protected JFrame createApplicationWindow() {
+		return new JFrame("Calculator");
 	}
 
 	@Override
