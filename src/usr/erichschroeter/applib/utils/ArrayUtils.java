@@ -10,6 +10,39 @@ import java.util.Arrays;
  */
 public class ArrayUtils {
 
+	public static byte[] filter(byte[] array, byte... filters) {
+		if (array == null) {
+			return new byte[0];
+		}
+		if (filters.length < 1) {
+			return array;
+		}
+		int filteredCount = 0;
+		for (int i = 0; i < array.length; i++) {
+			for (byte filter : filters) {
+				if (array[i] == filter) {
+					filteredCount++;
+				}
+			}
+		}
+		byte[] filtered = new byte[array.length - filteredCount];
+		int index = 0;
+		for (int i = 0; i < array.length; i++) {
+			boolean isFiltered = false;
+			for (byte filter : filters) {
+				if (array[i] == filter) {
+					isFiltered = true;
+					break; // exit filter loop immediately
+				}
+			}
+			if (!isFiltered) {
+				filtered[index] = array[i];
+				index++;
+			}
+		}
+		return filtered;
+	}
+
 	/**
 	 * Rearranges the given array in reverse order.
 	 * 

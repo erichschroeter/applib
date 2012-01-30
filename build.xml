@@ -87,8 +87,8 @@
 		</junitreport>
 	</target>
 
-	<!-- Generates a runnable JAR file for this application. -->
-	<target name="release" depends="increment-revision,build" description="generates the JAR file as a library">
+	<target name="jar">
+		<delete dir="${jar.location}" />
 		<echo>building library JAR</echo>
 		<mkdir dir="${jar.location}" />
 
@@ -120,6 +120,8 @@
 			</fileset>
 		</jar>
 	</target>
+
+	<target name="release" depends="build,increment-revision,jar" description="packages the plugin for distribution" />
 
 	<!-- Provide a help target that prints the descriptions of each target -->
 	<target name="help" description="print this menu">
