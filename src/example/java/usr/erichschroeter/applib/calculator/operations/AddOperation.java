@@ -1,9 +1,9 @@
-package example.calculator.operations;
+package usr.erichschroeter.applib.calculator.operations;
 
 import java.math.BigDecimal;
 
-import example.calculator.MathOperation;
-import example.calculator.OperationException;
+import usr.erichschroeter.applib.calculator.MathOperation;
+import usr.erichschroeter.applib.calculator.OperationException;
 
 /**
  * The <code>AddOperation</code> adds multiple numbers together.

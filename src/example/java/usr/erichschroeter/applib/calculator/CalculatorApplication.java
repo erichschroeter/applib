@@ -1,4 +1,4 @@
-package example.calculator;
+package usr.erichschroeter.applib.calculator;
 
 import usr.erichschroeter.applib.DesktopApplicationImpl;
 import usr.erichschroeter.applib.Lifecycle;

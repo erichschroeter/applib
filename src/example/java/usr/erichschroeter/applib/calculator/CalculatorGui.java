@@ -1,4 +1,4 @@
-package example.calculator;
+package usr.erichschroeter.applib.calculator;
 
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;

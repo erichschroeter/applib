@@ -1,11 +1,11 @@
-package example.calculator;
+package usr.erichschroeter.applib.calculator;
 
 import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Vector;
 
-import example.calculator.operations.AddOperation;
+import usr.erichschroeter.applib.calculator.operations.AddOperation;
 
 public class Calculator {
 

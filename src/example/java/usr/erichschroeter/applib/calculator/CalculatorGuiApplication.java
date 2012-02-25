@@ -1,4 +1,4 @@
-package example.calculator;
+package usr.erichschroeter.applib.calculator;
 
 import java.awt.BorderLayout;
 import java.awt.GridBagConstraints;
@@ -18,6 +18,7 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 
 import usr.erichschroeter.applib.GUIApplicationImpl;
+import usr.erichschroeter.applib.R;
 import usr.erichschroeter.applib.utils.Utils;
 
 public class CalculatorGuiApplication extends GUIApplicationImpl<JFrame> {
@@ -190,17 +191,14 @@ public class CalculatorGuiApplication extends GUIApplicationImpl<JFrame> {
 
 	@Override
 	public void setApplicationIcon(Icon applicationIcon) {
-		getApplicationWindow()
-				.setIconImages(
-						Arrays.asList(
-								Utils.iconToImage(Utils
-										.imageIcon("example/resources/calculator-16x16.png")),
-								Utils.iconToImage(Utils
-										.imageIcon("example/resources/calculator-24x24.png")),
-								Utils.iconToImage(Utils
-										.imageIcon("example/resources/calculator-32x32.png")),
-								Utils.iconToImage(Utils
-										.imageIcon("example/resources/calculator-48x48.png"))));
+		getApplicationWindow().setIconImages(
+				Arrays.asList(Utils.iconToImage(Utils.imageIcon(R
+						.png("calculator-16x16.png"))), Utils.iconToImage(Utils
+						.imageIcon(R.png("calculator-24x24.png"))), Utils
+						.iconToImage(Utils.imageIcon(R
+								.png("calculator-32x32.png"))), Utils
+						.iconToImage(Utils.imageIcon(R
+								.png("calculator-48x48.png")))));
 	}
 
 	@Override

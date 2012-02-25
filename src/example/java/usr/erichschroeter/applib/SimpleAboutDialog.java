@@ -1,4 +1,4 @@
-package example.applib;
+package usr.erichschroeter.applib;
 
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;

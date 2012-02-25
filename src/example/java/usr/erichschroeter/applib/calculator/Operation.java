@@ -1,4 +1,4 @@
-package example.calculator;
+package usr.erichschroeter.applib.calculator;
 
 /**
  * An <code>Operation</code> interface provides methods for objects that can

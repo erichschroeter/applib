@@ -1,4 +1,4 @@
-package example.calculator;
+package usr.erichschroeter.applib.calculator;
 
 /**
  * An <code>OperationException</code> is thrown when an {@link Operation} cannot

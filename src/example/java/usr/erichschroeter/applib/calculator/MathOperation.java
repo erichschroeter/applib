@@ -1,4 +1,4 @@
-package example.calculator;
+package usr.erichschroeter.applib.calculator;
 
 /**
  * A <code>MathOperation</code> is an {@link Operation} which performs a math
