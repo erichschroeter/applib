@@ -25,14 +25,28 @@ public class Utils {
 	/**
 	 * Returns the <code>resource</code> as an <code>ImageIcon</code>.
 	 * 
+	 * @see #imageIcon(String, Class)
 	 * @param resource
 	 *            the icon resource
 	 * @return the <code>resource</code> as an <code>ImageIcon</code>
 	 */
 	public static ImageIcon imageIcon(String resource) {
+		return imageIcon(resource, Utils.class.getClassLoader());
+	}
+
+	/**
+	 * Returns the <code>resource</code> as an <code>ImageIcon</code>.
+	 * 
+	 * @param resource
+	 *            the icon resource
+	 * @param classLoader
+	 *            the class loader from which to get the resource as a stream
+	 * @return the <code>resource</code> as an <code>ImageIcon</code>
+	 */
+	public static ImageIcon imageIcon(String resource, ClassLoader classLoader) {
 		ImageIcon icon = null;
 		try {
-			icon = new ImageIcon(ImageIO.read(Utils.class.getClassLoader()
+			icon = new ImageIcon(ImageIO.read(classLoader
 					.getResourceAsStream(resource)));
 		} catch (IOException e) {
 			e.printStackTrace();
