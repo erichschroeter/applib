@@ -1,0 +1,31 @@
+apply plugin: 'java'
+apply plugin: 'eclipse'
+
+group = 'usr.erichschroeter'
+version = '0.0.4'
+description = 'A library providing classes for creating Java desktop applications.'
+
+sourceCompatibility = 1.6
+
+repositories { mavenCentral() }
+
+dependencies {
+	compile group: 'junit', name: 'junit', version: '4.10'
+}
+
+task sourceJar(type: Jar) {
+	from sourceSets.main.java
+	from sourceSets.main.resources
+	classifier = 'sources'
+}
+
+task javadocJar(type: Jar) {
+	dependsOn javadoc
+	from javadoc.destinationDir
+	classifier = 'javadoc'
+}
+
+artifacts {
+	archives sourceJar
+	archives javadocJar
+}
