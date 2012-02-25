@@ -1,4 +1,4 @@
-package test.javamvc;
+package usr.erichschroeter.applib;
 
 import static org.junit.Assert.*;
 
@@ -11,9 +11,6 @@ import javax.swing.JFrame;
 
 import org.junit.Before;
 import org.junit.Test;
-
-import usr.erichschroeter.applib.DesktopApplicationImpl;
-import usr.erichschroeter.applib.GUIApplicationImpl;
 
 public class GUIApplicationTest {
 
@@ -73,7 +70,7 @@ public class GUIApplicationTest {
 	public void testApplicationIconSetsJFrameImages() {
 		final Icon icon = new ImageIcon(GUIApplicationTest.class
 				.getClassLoader().getResource(
-						"test/resources/application-icon.png"));
+						"usr/erichschroeter/applib/png/application-icon.png"));
 
 		app = new GUIApplicationImpl<JFrame>() {
 
