@@ -25,10 +25,10 @@ public class Utils {
 	/**
 	 * Returns the <code>resource</code> as an <code>ImageIcon</code>.
 	 * 
-	 * @see #imageIcon(String, Class)
 	 * @param resource
 	 *            the icon resource
 	 * @return the <code>resource</code> as an <code>ImageIcon</code>
+	 * @see #imageIcon(String, ClassLoader)
 	 */
 	public static ImageIcon imageIcon(String resource) {
 		return imageIcon(resource, Utils.class.getClassLoader());

@@ -28,7 +28,7 @@ public abstract class ViewImpl<C extends Component> implements View<C> {
 	/**
 	 * Constructs a <code>View</code> specifying the application the view
 	 * belongs to and the view component. This initializes the view by calling
-	 * {@link #initializeView()}.
+	 * {@link #initializeView(Component)}.
 	 * <p>
 	 * The order in which methods in this constructor are called is
 	 * <ol>

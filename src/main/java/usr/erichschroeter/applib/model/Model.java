@@ -27,7 +27,7 @@ public class Model<T> {
 	/**
 	 * Returns the wrapped model object.
 	 * 
-	 * @return
+	 * @return the model object being wrapped
 	 */
 	public T getModel() {
 		return model;

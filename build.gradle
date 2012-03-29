@@ -30,3 +30,24 @@ artifacts {
 	archives sourceJar
 	archives javadocJar
 }
+
+uploadArchives {
+	repositories.mavenDeployer {
+		pom.project {
+			developers {
+				developer {
+					name 'Erich Schroeter'
+					email 'erichschroeter@gmail.com'
+					roles {
+						role 'author'
+						role 'developer'
+					}
+				}
+				scm {
+					connection 'git://github.com/erichschroeter/applib.git'
+					url 'git://github.com/erichschroeter/applib.git'
+				}
+			}
+		}
+	}
+}

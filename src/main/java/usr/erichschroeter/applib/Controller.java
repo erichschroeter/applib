@@ -39,13 +39,6 @@ public class Controller {
 	/**
 	 * Constructs a <code>Controller</code> specifying the model and view
 	 * managers.
-	 * <p>
-	 * After initializing fields, the sequence of method calls is
-	 * <ol>
-	 * <li>{@link #installModels()}</li>
-	 * <li>{@link #installViews()}</li>
-	 * <li>{@link #mapViewsAndModels()}</li>
-	 * </ol>
 	 * 
 	 * @param modelManager
 	 *            the model manager

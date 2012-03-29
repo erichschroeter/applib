@@ -213,7 +213,7 @@ public abstract class DesktopApplicationImpl implements DesktopApplication {
 	 * <code>super.installApplicationPreferences()</code> to ensure the default
 	 * preference values are saved.
 	 * 
-	 * @see #installApplicationPreferences()
+	 * @see #installApplicationPreferences(Preferences)
 	 */
 	protected void saveApplicationPreferences() {
 	}
@@ -433,7 +433,7 @@ public abstract class DesktopApplicationImpl implements DesktopApplication {
 	 * for a specific lifecycle types. Specific lifecycle listeners are notified
 	 * before listeners for all lifecycle types.
 	 * 
-	 * @param lifecycle
+	 * @param event
 	 *            the lifecycle type representing the state of the application
 	 */
 	protected void fireLifecycleChange(LifecycleEvent event) {
